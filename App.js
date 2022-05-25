@@ -1,10 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import * as firebase from "firebase/app";
+import * as firebaseAuth from "firebase/auth";
+import "./services/firebase_config";
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text>Firebase SDK version {firebase.SDK_VERSION}</Text>
+      <Text>User is signed in: {firebaseAuth.getAuth().currentUser == null ? "False" : "True"} </Text>
       <StatusBar style="auto" />
     </View>
   );
