@@ -1,5 +1,6 @@
 '''Main communications module for Automatic Pet Feeder'''
 from flask import Flask, request, make_response, jsonify
+from api.motor import start_motor_api, stop_motor_api
 from api.schedule import update_schedule_api, get_schedule_api
 
 app = Flask(__name__)
@@ -36,6 +37,23 @@ def dispense_water():
     '''Dispenses water on command, disregarding the scheduler.
        THIS DOES NOT INVALIDATE SCHEDULER'''
     return make_response('', 404)
+
+
+@app.route('/api/motor', methods=['POST'])
+def motor():
+    '''Controls the motor depending on the data past'''
+    data = request.get_json()
+
+    if not 'action' in data:
+        return make_response('', 400)
+
+    if data['action'] == 0:
+        stop_motor_api()
+
+    if data['action'] == 1:
+        start_motor_api()
+
+    return make_response('', 204)
 
 
 if __name__ == '__main__':
