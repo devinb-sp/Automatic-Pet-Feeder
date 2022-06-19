@@ -1,27 +1,39 @@
 '''Update schedule api'''
 
+from api.helpers.schedule_file_helper import modify_schedule_data, read_schedule_data
+from api.constants.constants import FOOD_LABEL, WATER_LABEL
 
-def update_schedule_api(data, request):
+
+def get_schedule_api():
+    '''Returns current schedule'''
+    return read_schedule_data()
+
+
+def update_schedule_api(data):
     '''Updates pet feeder schedule'''
-    data = request.get_json()
     result = 200
 
-    if not 'food' in data and not 'water' in data:
+    if not FOOD_LABEL in data and not WATER_LABEL in data:
         return 'Schedule data cannot be empty', 400
 
-    if 'food' in data:
-        result = update_food_schedule(data['food'])
+    if FOOD_LABEL in data:
+        result = update_food_schedule(data[FOOD_LABEL])
 
         if result != 200:
             return result
 
-    if 'water' in data:
-        result = update_water_schedule(data['water'])
+    if WATER_LABEL in data:
+        result = update_water_schedule(data[WATER_LABEL])
 
         if result != 200:
             return result
 
-    return 'Schedule updated successfully', result
+    did_update = modify_schedule_data(data)
+
+    if not did_update:
+        return 'Error updating schedule', 500
+
+    return 'Schedule updated successfully', 200
 
 
 def update_food_schedule(food_schedule):
