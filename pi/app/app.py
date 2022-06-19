@@ -1,11 +1,9 @@
 '''Main communications module for Automatic Pet Feeder'''
 from flask import Flask, request, make_response, jsonify
-from api.motor import start_motor_api, stop_motor_api, initialize_arduino_connection_api, shutdown_arduino_connection_api
+from api.motor import start_motor_api, stop_motor_api
 from api.schedule import update_schedule_api, get_schedule_api
 
 app = Flask(__name__)
-
-initialize_arduino_connection_api()
 
 
 @app.route('/api/schedule', methods=['GET'])

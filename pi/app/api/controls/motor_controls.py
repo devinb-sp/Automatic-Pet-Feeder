@@ -1,6 +1,5 @@
 '''Motor controls'''
 import serial
-import struct
 
 PORT = '/dev/ttyACM0'
 BAUD_RATE = 9600
@@ -9,7 +8,7 @@ ENCODING = 'utf-8'
 START_ACTION = 1
 STOP_ACTION = 0
 
-ser = serial.Serial(PORT, BAUD_RATE)
+arduino = serial.Serial(PORT, BAUD_RATE)
 
 
 def start_motor():
@@ -23,13 +22,11 @@ def stop_motor():
 
 
 def control_motor(action):
-    ser.reset_input_buffer()
-    ser.write(str(action).encode(ENCODING))
-    
-    
-def initialize_arduino_connection():
-    ser = serial.Serial(PORT, BAUD_RATE)
+    '''Base to control the motor by passing an action'''
+    arduino.reset_input_buffer()
+    arduino.write(str(action).encode(ENCODING))
 
 
 def shutdown_arduino_connection():
-    ser.close()
+    '''Shutsdown serial connection'''
+    arduino.close()
