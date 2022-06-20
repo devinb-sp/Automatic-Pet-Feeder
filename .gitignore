@@ -9,6 +9,12 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+.vscode
+/pi/app/.venv
 
 # macOS
 .DS_Store
+
+# Flask
+/pi/app/api/__pycache__
+/pi/app/__pycache__
