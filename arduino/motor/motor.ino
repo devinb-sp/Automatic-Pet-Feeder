@@ -16,9 +16,6 @@
 #define WATER_SENSOR_PIN A0
 #define FOOD_SENSOR_PIN A1
 
-// LED
-#define TEST_LED_PIN 10
-
 // Actions
 #define START_MOTOR_ACTION 1
 #define STOP_MOTOR_ACTION 0
@@ -36,6 +33,9 @@ void setup() {
 }
 
 void loop() {
+  readWaterSensor();
+  readFoodSensor();
+  
   if (Serial.available() > 0)
   {
     // Current actions are:
@@ -119,20 +119,25 @@ void readWaterSensor()
 
 void readFoodSensor()
 {
-  readSensor(FOOD_SENSOR_PIN, startMotorAction, stopMotorAction);
 }
 
 void readSensor(int pin, void (*startFunc)(), void (*stopFunc)())
 {
   int sensorReading = analogRead(pin);
 
-  if (sensorReading < 200) // from 10 to 199
+  Serial.println(sensorReading);
+
+  if (sensorReading < 500)
   {
-    digitalWrite(TEST_LED_PIN, LOW);
+    stopPumpAction();
+  }
+  else if (sensorReading < 640) // from 10 to 199
+  {
+    startPumpAction();
   }
 
-  if (sensorReading >= 1023) // from 800 to 1023
+  if (sensorReading >= 740) // from 800 to 1023
   {
-    digitalWrite(TEST_LED_PIN, HIGH);
+    stopPumpAction();
   }
 }
