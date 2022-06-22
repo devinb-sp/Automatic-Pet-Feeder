@@ -53,7 +53,7 @@ def motor():
         arduino.stop_motor()
 
     if data['action'] == 'start':
-        arduino.stop_motor()
+        arduino.start_motor()
 
     return make_response('', 204)
 

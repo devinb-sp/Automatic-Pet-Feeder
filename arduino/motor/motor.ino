@@ -125,8 +125,6 @@ void readSensor(int pin, void (*startFunc)(), void (*stopFunc)())
 {
   int sensorReading = analogRead(pin);
 
-  Serial.println(sensorReading);
-
   if (sensorReading < 500)
   {
     stopPumpAction();
