@@ -6,9 +6,9 @@
 #define OFF_MOTOR_SPEED 0
 
 // Pump
-#define PUMP_PIN 3
+#define PUMP_PIN 5
 #define PUMP_IN_1 4
-#define PUMP_IN_2 5
+#define PUMP_IN_2 3
 #define ON_PUMP_VALUE 255
 #define OFF_PUMP_VALUE 0
 
