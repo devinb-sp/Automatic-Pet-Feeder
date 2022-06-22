@@ -1,18 +1,27 @@
+// Motor
 #define MOTOR_PIN 9
 #define MOTOR_IN_1 8
 #define MOTOR_IN_2 7
 #define ON_MOTOR_SPEED 255
 #define OFF_MOTOR_SPEED 0
 
+// Pump
+#define PUMP_PIN 3
+#define PUMP_IN_1 4
+#define PUMP_IN_2 5
+#define ON_PUMP_VALUE 255
+#define OFF_PUMP_VALUE 0
+
 // Actions
 #define START_MOTOR_ACTION 1
 #define STOP_MOTOR_ACTION 0
-
-#define 
+#define START_PUMP_ACTION 2
+#define STOP_PUMP_ACTION 3
 
 void setup() {
   Serial.begin(9600);
   setUpMotor();
+  setUpPump();
 }
 
 void loop() {
@@ -21,8 +30,9 @@ void loop() {
     // Current actions are:
     //  0 - Stops motor
     //  1 - Starts motor
-    //
-    //
+    //  2 - Starts pump
+    //  3 - Stops pump
+    // 
     //  TODO: We need to adjust the start motor to rotate for the
     //        correct amount of seconds to pour the predefined food amount
     int action = Serial.parseInt();
@@ -35,6 +45,12 @@ void loop() {
       case START_MOTOR_ACTION:
         startMotorAction();
         break;
+      case START_PUMP_ACTION:
+        startPumpAction();
+        break;
+      case START_PUMP_ACTION:
+        stopPumpAction();
+        break;
       default:
         break;
     }
@@ -43,21 +59,44 @@ void loop() {
 
 void setUpMotor()
 {
-  pinMode(MOTOR_PIN, OUTPUT);
-  digitalWrite(MOTOR_IN_1, LOW);
-  digitalWrite(MOTOR_IN_2, LOW);
+  setupDcComponent(MOTOR_PIN, MOTOR_IN_1, MOTOR_IN_2);
+}
+
+void setUpPump()
+{
+  setupDcComponent(PUMP_PIN, PUMP_IN_1, PUMP_IN_2);
 }
 
 void startMotorAction()
 {
-  analogWrite(MOTOR_PIN, ON_MOTOR_SPEED);
-  digitalWrite(MOTOR_IN_1, HIGH);
-  digitalWrite(MOTOR_IN_2, LOW);
+  controlDcComponent(MOTOR_PIN, ON_MOTOR_SPEED, MOTOR_IN_1, HIGH, MOTOR_IN_2, LOW);
 }
 
 void stopMotorAction()
 {
-  analogWrite(MOTOR_PIN, OFF_MOTOR_SPEED);
-  digitalWrite(MOTOR_IN_1, LOW);
-  digitalWrite(MOTOR_IN_2, LOW);
+  controlDcComponent(MOTOR_PIN, OFF_MOTOR_SPEED, MOTOR_IN_1, LOW, MOTOR_IN_2, LOW);
+}
+
+void startPumpAction()
+{
+  controlDcComponent(PUMP_PIN, ON_PUMP_VALUE, PUMP_IN_1, HIGH, PUMP_IN_2, LOW);
+}
+
+void stopPumpAction()
+{
+  controlDcComponent(PUMP_PIN, OFF_PUMP_VALUE, PUMP_IN_1, LOW, PUMP_IN_2, LOW);
+}
+
+void controlDcComponent(int pin, int value, int in1Pin, int in2Value, int in2Pin, int in2Value)
+{
+  analogWrite(pin, value);
+  digitalWrite(in1Pin, in1Value);
+  digitalWrite(in2Pin, in2Value);
+}
+
+void setupDcComponent(int pin, int in1, int in2)
+{
+  pinMode(pin, OUTPUT);
+  digitalWrite(in1, LOW);
+  digitalWrite(in2, LOW);
 }
