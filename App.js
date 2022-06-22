@@ -1,24 +1,45 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import * as firebase from "firebase/app";
-import * as firebaseAuth from "firebase/auth";
-import "./services/firebase_config";
+import * as React from 'react';
+import { View, Text } from 'react-native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AppLoading from 'expo-app-loading';
+import { useFonts } from 'expo-font';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Firebase SDK version {firebase.SDK_VERSION}</Text>
-      <Text>User is signed in: {firebaseAuth.getAuth().currentUser == null ? "False" : "True"} </Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+import Home from './screens/Home';
+import Camera from './screens/Camera';
+import Settings from './screens/Settings';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const Stack = createNativeStackNavigator();
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'transparent',
   },
-});
+};
+
+const App = () => {
+  const [fontsLoaded] = useFonts({
+    RobotoBlack: require('./assets/fonts/Roboto/Roboto-Black.ttf'),
+    RobotoBold: require('./assets/fonts/Roboto/Roboto-Bold.ttf'),
+    RobotoLight: require('./assets/fonts/Roboto/Roboto-Light.ttf'),
+    RobotoMedium: require('./assets/fonts/Roboto/Roboto-Medium.ttf'),
+    RobotoRegular: require('./assets/fonts/Roboto/Roboto-Regular.ttf'),
+    RobotoThin: require('./assets/fonts/Roboto/Roboto-Thin.ttf'),
+  });
+
+  if (!fontsLoaded) return <AppLoading />;
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Home">
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Camera" component={Camera} />
+        <Stack.Screen name="Settings" component={Settings} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default App;
