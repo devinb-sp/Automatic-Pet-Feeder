@@ -12,6 +12,13 @@
 #define ON_PUMP_VALUE 255
 #define OFF_PUMP_VALUE 0
 
+// Force sensors
+#define WATER_SENSOR_PIN A0
+#define FOOD_SENSOR_PIN A1
+
+// LED
+#define TEST_LED_PIN 10
+
 // Actions
 #define START_MOTOR_ACTION 1
 #define STOP_MOTOR_ACTION 0
@@ -20,6 +27,7 @@
 
 void controlDcComponent(int pin, int value, int in1Pin, int in1Value, int in2Pin, int in2Value);
 void setupDcComponent(int pin, int in1, int in2);
+void readSensor(int pin, void (*startFunc)(), void (*stopFunc)());
 
 void setup() {
   Serial.begin(9600);
@@ -102,4 +110,29 @@ void setupDcComponent(int pin, int in1, int in2)
   pinMode(pin, OUTPUT);
   digitalWrite(in1, LOW);
   digitalWrite(in2, LOW);
+}
+
+void readWaterSensor()
+{
+  readSensor(WATER_SENSOR_PIN, startPumpAction, stopPumpAction);
+}
+
+void readFoodSensor()
+{
+  readSensor(FOOD_SENSOR_PIN, startMotorAction, stopMotorAction);
+}
+
+void readSensor(int pin, void (*startFunc)(), void (*stopFunc)())
+{
+  int sensorReading = analogRead(pin);
+
+  if (sensorReading < 200) // from 10 to 199
+  {
+    digitalWrite(TEST_LED_PIN, LOW);
+  }
+
+  if (sensorReading >= 1023) // from 800 to 1023
+  {
+    digitalWrite(TEST_LED_PIN, HIGH);
+  }
 }
