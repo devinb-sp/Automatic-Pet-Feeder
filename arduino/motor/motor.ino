@@ -18,6 +18,9 @@
 #define START_PUMP_ACTION 2
 #define STOP_PUMP_ACTION 3
 
+void controlDcComponent(int pin, int value, int in1Pin, int in1Value, int in2Pin, int in2Value);
+void setupDcComponent(int pin, int in1, int in2);
+
 void setup() {
   Serial.begin(9600);
   setUpMotor();
@@ -48,7 +51,7 @@ void loop() {
       case START_PUMP_ACTION:
         startPumpAction();
         break;
-      case START_PUMP_ACTION:
+      case STOP_PUMP_ACTION:
         stopPumpAction();
         break;
       default:
@@ -87,7 +90,7 @@ void stopPumpAction()
   controlDcComponent(PUMP_PIN, OFF_PUMP_VALUE, PUMP_IN_1, LOW, PUMP_IN_2, LOW);
 }
 
-void controlDcComponent(int pin, int value, int in1Pin, int in2Value, int in2Pin, int in2Value)
+void controlDcComponent(int pin, int value, int in1Pin, int in1Value, int in2Pin, int in2Value)
 {
   analogWrite(pin, value);
   digitalWrite(in1Pin, in1Value);
