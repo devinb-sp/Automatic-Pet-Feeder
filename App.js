@@ -1,23 +1,13 @@
-import * as React from 'react';
-import { View, Text } from 'react-native';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AppLoading from 'expo-app-loading';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useFonts } from 'expo-font';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Home from './screens/Home';
 import Camera from './screens/Camera';
 import Settings from './screens/Settings';
 
-const Stack = createNativeStackNavigator();
-
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: 'transparent',
-  },
-};
+const Tab = createBottomTabNavigator();
 
 const App = () => {
   const [fontsLoaded] = useFonts({
@@ -29,15 +19,34 @@ const App = () => {
     RobotoThin: require('./assets/fonts/Roboto/Roboto-Thin.ttf'),
   });
 
-  if (!fontsLoaded) return <AppLoading />;
+  if (!fontsLoaded) return null;
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Home">
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Camera" component={Camera} />
-        <Stack.Screen name="Settings" component={Settings} />
-      </Stack.Navigator>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Home') {
+              iconName = focused ? 'home' : 'home-outline';
+            } else if (route.name === 'Camera') {
+              iconName = focused ? 'camera' : 'camera-outline';
+            } else if (route.name === 'Settings') {
+              iconName = focused ? 'cog' : 'cog-outline';
+            }
+
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: 'black',
+          tabBarInactiveTintColor: 'gray',
+        })}
+      >
+        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Camera" component={Camera} />
+        <Tab.Screen name="Settings" component={Settings} />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 };
