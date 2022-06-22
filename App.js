@@ -1,24 +1,54 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import * as firebase from "firebase/app";
-import * as firebaseAuth from "firebase/auth";
-import "./services/firebase_config";
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useFonts } from 'expo-font';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function App() {
+import Home from './screens/Home';
+import Camera from './screens/Camera';
+import Settings from './screens/Settings';
+
+const Tab = createBottomTabNavigator();
+
+const App = () => {
+  const [fontsLoaded] = useFonts({
+    RobotoBlack: require('./assets/fonts/Roboto/Roboto-Black.ttf'),
+    RobotoBold: require('./assets/fonts/Roboto/Roboto-Bold.ttf'),
+    RobotoLight: require('./assets/fonts/Roboto/Roboto-Light.ttf'),
+    RobotoMedium: require('./assets/fonts/Roboto/Roboto-Medium.ttf'),
+    RobotoRegular: require('./assets/fonts/Roboto/Roboto-Regular.ttf'),
+    RobotoThin: require('./assets/fonts/Roboto/Roboto-Thin.ttf'),
+  });
+
+  if (!fontsLoaded) return null;
+
   return (
-    <View style={styles.container}>
-      <Text>Firebase SDK version {firebase.SDK_VERSION}</Text>
-      <Text>User is signed in: {firebaseAuth.getAuth().currentUser == null ? "False" : "True"} </Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+            if (route.name === 'Home') {
+              iconName = focused ? 'home' : 'home-outline';
+            } else if (route.name === 'Camera') {
+              iconName = focused ? 'camera' : 'camera-outline';
+            } else if (route.name === 'Settings') {
+              iconName = focused ? 'cog' : 'cog-outline';
+            }
+
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: 'black',
+          tabBarInactiveTintColor: 'gray',
+        })}
+      >
+        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen name="Camera" component={Camera} />
+        <Tab.Screen name="Settings" component={Settings} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+};
+
+export default App;
