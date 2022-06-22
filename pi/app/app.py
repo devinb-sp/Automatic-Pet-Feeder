@@ -1,9 +1,11 @@
 '''Main communications module for Automatic Pet Feeder'''
 from flask import Flask, request, make_response, jsonify
-from api.motor import start_motor_api, stop_motor_api
 from api.schedule import update_schedule_api, get_schedule_api
+from api.controls.arduino import Arduino
 
 app = Flask(__name__)
+
+arduino = Arduino()
 
 
 @app.route('/api/schedule', methods=['GET'])
@@ -41,17 +43,34 @@ def dispense_water():
 
 @app.route('/api/motor', methods=['POST'])
 def motor():
-    '''Controls the motor depending on the data past'''
+    '''Controls the motor depending on the data passed'''
     data = request.get_json()
 
     if not 'action' in data:
         return make_response('', 400)
 
-    if data['action'] == 'stop_motor':
-        stop_motor_api()
+    if data['action'] == 'stop':
+        arduino.stop_motor()
 
-    if data['action'] == 'start_motor':
-        start_motor_api()
+    if data['action'] == 'start':
+        arduino.start_motor()
+
+    return make_response('', 204)
+
+
+@app.route('/api/pump', methods=['POST'])
+def pump():
+    '''Controls the pump depending on the data passed'''
+    data = request.get_json()
+
+    if not 'action' in data:
+        return make_response('', 400)
+
+    if data['action'] == 'start':
+        arduino.start_pump()
+
+    if data['action'] == 'stop':
+        arduino.stop_pump()
 
     return make_response('', 204)
 
