@@ -1,7 +1,8 @@
 '''Controls all the basic functions of the Arduino'''
 import serial
 
-PORT = '/dev/ttyACM0'
+# PORT = '/dev/ttyACM0'
+PORT = '/dev/cu.usbmodem14301'
 BAUD_RATE = 9600
 ENCODING = 'utf-8'
 
