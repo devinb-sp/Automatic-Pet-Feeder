@@ -1,17 +1,18 @@
 '''Main communications module for Automatic Pet Feeder'''
 from flask import Flask, request, make_response, jsonify
-from api.schedule import update_schedule_api, get_schedule_api
+from api.schedule import ScheduleHelper
 from api.controls.arduino import Arduino
 
 app = Flask(__name__)
 
 arduino = Arduino()
+scheduler_helper = ScheduleHelper(arduino)
 
 
 @app.route('/api/schedule', methods=['GET'])
 def get_schedule():
     '''Returns the current schedule of the pet feeder'''
-    data = get_schedule_api()
+    data = scheduler_helper.get_schedule_api()
 
     if isinstance(data, int):
         return make_response('', data)
@@ -24,7 +25,7 @@ def update_schedule():
     '''Updates the schedule for both food and water cycles'''
     data = request.get_json()
 
-    return update_schedule_api(data)
+    return scheduler_helper.update_schedule_api(data)
 
 
 @app.route('/api/dispense-food', methods=['POST'])
