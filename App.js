@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFonts } from 'expo-font';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Home from './screens/Home';
@@ -51,18 +52,13 @@ const App = () => {
     RobotoThin: require('./assets/fonts/Roboto/Roboto-Thin.ttf'),
   });
 
-  let isLoggedIn = false;
-
   if (!fontsLoaded) return null;
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        {isLoggedIn ? (
-          <Stack.Screen name="After Login" component={AfterLogin} options={{ headerShown: false }} />
-        ) : (
-          <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
-        )}
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+        <Stack.Screen name="After Login" component={AfterLogin} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

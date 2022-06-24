@@ -1,7 +1,11 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { KeyboardAvoidingView, StyleSheet, View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { useNavigation } from '@react-navigation/native';
 
 import petFeederImage from '../assets/images/petfeeder.png';
+
+import { auth } from '../firebase';
 
 const styles = StyleSheet.create({
   container: {
@@ -74,33 +78,63 @@ const styles = StyleSheet.create({
 });
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigation.navigate('After Login');
+        const uid = user.uid;
+      } else {
+        // User is signed out
+        navigation.navigate('Login');
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const handleSignUp = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+      })
+      .catch((error) => alert(error.message));
+  };
+
+  const handleLogin = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+      })
+      .catch((error) => alert(error.message));
+  };
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <Text style={styles.welcomeText}>WELCOME</Text>
       <Text style={styles.subtext}>To your automatic pet feeder</Text>
       <Image style={styles.image} source={petFeederImage}></Image>
       <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Email"
-          //value={}
-          //onChangeText={text => }
-          style={styles.input}
-        />
+        <TextInput placeholder="Email" value={email} onChangeText={(text) => setEmail(text)} style={styles.input} />
         <TextInput
           placeholder="Password"
-          //value={}
-          //onChangeText={text => }
+          value={password}
+          onChangeText={(text) => setPassword(text)}
           style={styles.input}
           secureTextEntry
         />
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => {}} style={styles.button}>
+        <TouchableOpacity onPress={handleLogin} style={styles.button}>
           <Text style={styles.buttonText}>Sign In</Text>
         </TouchableOpacity>
         <Text style={styles.signUpQuestion}>Don't have an account?</Text>
-        <TouchableOpacity onPress={() => {}} style={styles.textButton}>
+        <TouchableOpacity onPress={handleSignUp} style={styles.textButton}>
           <Text style={styles.textButtonText}>SIGN UP NOW</Text>
         </TouchableOpacity>
       </View>
