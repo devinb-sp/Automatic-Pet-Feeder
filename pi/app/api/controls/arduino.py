@@ -48,4 +48,4 @@ class Arduino:
     def dispense_food(self, amount: float):
         '''Dispenses food, [amount] describes the amount of food in half a cup '''
         self.__perform_action(self.actions['dispense_food'], args=[amount])
-        print(self.arduino.read_all())
+        print(self.arduino.readline())
