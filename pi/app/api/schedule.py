@@ -53,13 +53,13 @@ class ScheduleHelper:
         self.__scheduler.remove_all_jobs()
 
         now = datetime.now()
-        for time in food_schedule['times']:
+        for i, time in enumerate(food_schedule['times']):
             schedule_datetime = datetime.fromisoformat(time)
             schedule_datetime = datetime(now.year, now.month, now.day,
                                          schedule_datetime.hour,
                                          schedule_datetime.minute)
-            self.__scheduler.add_job(self.__arduino.start_motor,
-                                     'interval',
+            self.__scheduler.add_job(self.__arduino.dispense_food,
+                                     'interval', [food_schedule['amounts'][i]],
                                      hours=24,
                                      next_run_time=schedule_datetime)
 
