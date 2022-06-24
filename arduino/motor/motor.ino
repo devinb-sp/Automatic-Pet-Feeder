@@ -97,13 +97,9 @@ void stopPumpAction()
 
 void dispenseFoodAction()
 {
-  Serial.println("In dispense food. Waiting for amount");
   while (Serial.available() <= 0);
   
-  float amount = Serial.parseFloat();
-  
-  Serial.println("Received amount");
-  Serial.println(amount);
+  float amount = Serial.read();
 
   startMotorAction();
   delay(amount * (float) MILLIS_FOR_CUP);
@@ -137,7 +133,7 @@ void readForceSensor(int pin, void (*startFunc)(), void (*stopFunc)())
 {
   int sensorReading = analogRead(pin);
 
-  if (sensorReading < 500)
+  if (sensorReading < 400)
   {
     stopPumpAction();
   }

@@ -1,4 +1,5 @@
 '''Controls all the basic functions of the Arduino'''
+from time import sleep
 import serial
 
 PORT = '/dev/ttyACM0'
@@ -26,6 +27,7 @@ class Arduino:
         self.arduino.write(str(action).encode(ENCODING))
 
         if args is not None:
+            sleep(1)
             for arg in args:
                 self.arduino.write(str(arg).encode(ENCODING))
 
@@ -48,4 +50,3 @@ class Arduino:
     def dispense_food(self, amount: float):
         '''Dispenses food, [amount] describes the amount of food in half a cup '''
         self.__perform_action(self.actions['dispense_food'], args=[amount])
-        print(self.arduino.readline())
