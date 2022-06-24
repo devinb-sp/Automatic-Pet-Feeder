@@ -4,6 +4,7 @@
 #define MOTOR_IN_2 7
 #define ON_MOTOR_SPEED 255
 #define OFF_MOTOR_SPEED 0
+#define MILLIS_FOR_CUP 120000
 
 // Pump
 #define PUMP_PIN 5
@@ -13,18 +14,19 @@
 #define OFF_PUMP_VALUE 0
 
 // Force sensors
-#define WATER_SENSOR_PIN A0
-#define FOOD_SENSOR_PIN A1
+#define WATER_FORCE_SENSOR_PIN A0
+#define FOOD_FORCE_SENSOR_PIN A1
 
 // Actions
 #define START_MOTOR_ACTION 1
 #define STOP_MOTOR_ACTION 0
 #define START_PUMP_ACTION 2
 #define STOP_PUMP_ACTION 3
+#define DISPENSE_FOOD_ACTION 4
 
 void controlDcComponent(int pin, int value, int in1Pin, int in1Value, int in2Pin, int in2Value);
 void setupDcComponent(int pin, int in1, int in2);
-void readSensor(int pin, void (*startFunc)(), void (*stopFunc)());
+void readForceSensor(int pin, void (*startFunc)(), void (*stopFunc)());
 
 void setup() {
   Serial.begin(9600);
@@ -33,19 +35,11 @@ void setup() {
 }
 
 void loop() {
-  readWaterSensor();
-  readFoodSensor();
+  readWaterForceSensor();
+  readFoodForceSensor();
   
   if (Serial.available() > 0)
   {
-    // Current actions are:
-    //  0 - Stops motor
-    //  1 - Starts motor
-    //  2 - Starts pump
-    //  3 - Stops pump
-    // 
-    //  TODO: We need to adjust the start motor to rotate for the
-    //        correct amount of seconds to pour the predefined food amount
     int action = Serial.parseInt();
 
     switch(action)
@@ -61,6 +55,9 @@ void loop() {
         break;
       case STOP_PUMP_ACTION:
         stopPumpAction();
+        break;
+      case DISPENSE_FOOD_ACTION:
+        dispenseFoodAction();
         break;
       default:
         break;
@@ -98,6 +95,17 @@ void stopPumpAction()
   controlDcComponent(PUMP_PIN, OFF_PUMP_VALUE, PUMP_IN_1, LOW, PUMP_IN_2, LOW);
 }
 
+void dispenseFoodAction()
+{
+  while (Serial.available() <= 0);
+  
+  float amount = Serial.read();
+
+  startMotorAction();
+  delay(amount * (float) MILLIS_FOR_CUP);
+  stopMotorAction();
+}
+
 void controlDcComponent(int pin, int value, int in1Pin, int in1Value, int in2Pin, int in2Value)
 {
   analogWrite(pin, value);
@@ -112,20 +120,20 @@ void setupDcComponent(int pin, int in1, int in2)
   digitalWrite(in2, LOW);
 }
 
-void readWaterSensor()
+void readWaterForceSensor()
 {
-  readSensor(WATER_SENSOR_PIN, startPumpAction, stopPumpAction);
+  readForceSensor(WATER_FORCE_SENSOR_PIN, startPumpAction, stopPumpAction);
 }
 
-void readFoodSensor()
+void readFoodForceSensor()
 {
 }
 
-void readSensor(int pin, void (*startFunc)(), void (*stopFunc)())
+void readForceSensor(int pin, void (*startFunc)(), void (*stopFunc)())
 {
   int sensorReading = analogRead(pin);
 
-  if (sensorReading < 500)
+  if (sensorReading < 400)
   {
     stopPumpAction();
   }

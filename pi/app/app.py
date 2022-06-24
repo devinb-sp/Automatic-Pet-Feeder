@@ -32,7 +32,11 @@ def update_schedule():
 def dispense_food():
     '''Dispenses foods on command, disregarding the scheduler.
        THIS DOES NOT INVALIDATE SCHEDULER'''
-    return make_response('', 404)
+    data = request.get_json()
+
+    arduino.dispense_food(data['amount'] or 1)
+
+    return make_response('', 204)
 
 
 @app.route('/api/dispense-water', methods=['POST'])
