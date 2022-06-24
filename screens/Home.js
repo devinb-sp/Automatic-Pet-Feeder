@@ -20,7 +20,7 @@ const Home = () => {
         <Text style={styles.buttonText}>Start Motor</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={handleStopMotor} style={styles.button}>
-        <Text style={styles.buttonText}>Start Motor</Text>
+        <Text style={styles.buttonText}>Stop Motor</Text>
       </TouchableOpacity>
     </View>
   );
