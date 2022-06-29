@@ -1,80 +1,18 @@
-import * as React from 'react';
-import { KeyboardAvoidingView, StyleSheet, View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
+import styles from '../util/styles';
+import { ApiHelper } from '../helpers/api_helper';
+('../helpers/api_helper');
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  welcomeText: {
-    fontFamily: 'RobotoBlack',
-    fontSize: 50,
-    marginBottom: 0,
-    marginTop: 40,
-  },
-  subtext: {
-    fontFamily: 'RobotoRegular',
-    marginTop: -10,
-    marginBottom: 40,
-  },
-  image: {
-    resizeMode: 'contain',
-    height: '30%',
-    width: '100%',
-    marginBottom: 40,
-  },
-  inputContainer: {
-    width: '90%',
-  },
-  input: {
-    backgroundColor: 'white',
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    fontFamily: 'RobotoRegular',
-    borderColor: 'lightgray',
-    borderWidth: 1,
-  },
-  buttonContainer: {
-    width: '90%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    //marginTop: 10,
-  },
-  button: {
-    backgroundColor: '#5363B6',
-    paddingVertical: 12,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-    borderColor: 'rgba(0, 0, 0, 0.3)',
-    borderWidth: 1,
-  },
-  buttonText: {
-    fontFamily: 'RobotoRegular',
-    color: 'white',
-  },
-  signUpQuestion: {
-    fontFamily: 'RobotoRegular',
-    color: 'gray',
-    marginTop: 20,
-    fontSize: 12,
-  },
-  textButton: {
-    marginTop: 2,
-  },
-  textButtonText: {
-    fontFamily: 'RobotoMedium',
-    color: '#5363B6',
-  },
-});
+const apiHelper = new ApiHelper();
 
 const Settings = () => {
+  const [foodAmounts, setFoodAmounts] = useState([]);
+  const [foodTimes, setFoodTimes] = useState([]);
+
   const navigation = useNavigation();
 
   const handleSignOut = () => {
@@ -82,7 +20,15 @@ const Settings = () => {
       .then(() => {
         navigation.navigate('Login');
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleGetSchedule = async () => {
+    const result = await apiHelper.getFoodSchedule();
+    setFoodAmounts(result.food.amounts);
+    setFoodTimes(result.food.times);
   };
 
   return (
@@ -92,6 +38,40 @@ const Settings = () => {
       <TouchableOpacity onPress={handleSignOut} style={styles.textButton}>
         <Text style={styles.textButtonText}>SIGN OUT</Text>
       </TouchableOpacity>
+      <TouchableOpacity onPress={handleGetSchedule} style={styles.textButton}>
+        <Text style={styles.textButtonText}>Get schedule</Text>
+      </TouchableOpacity>
+      <Text style={{ fontFamily: 'RobotoBlack', fontSize: 20 }}>Food Schedule</Text>
+      {foodAmounts?.map((amount, index) => (
+        <AmountAndTimeScheduleInput
+          amount={amount}
+          time={new Date(Date.parse(foodTimes[index])).toLocaleTimeString() ?? ''}
+        />
+      ))}
+    </View>
+  );
+};
+
+const AmountAndTimeScheduleInput = (props) => {
+  return (
+    <View style={styles.center}>
+      <View style={styles.rowContainer}>
+        <TextInput
+          key={props.amount}
+          placeholder="Amount"
+          value={props.amount.toString()}
+          onChangeText={(text) => {}}
+          style={styles.input}
+        />
+        <Text key={props.amount.toString() + 'text'}>Cups</Text>
+      </View>
+      <TextInput
+        key={props.time}
+        placeholder="Time"
+        value={props.time.toString()}
+        onChangeText={(text) => {}}
+        style={styles.input}
+      />
     </View>
   );
 };
