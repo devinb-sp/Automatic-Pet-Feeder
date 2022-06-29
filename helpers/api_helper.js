@@ -1,16 +1,40 @@
-class ApiHelper {
+export class ApiHelper {
   baseUrl = 'http://192.168.1.83:5000/api/';
+  // baseUrl = 'http://localhost:5000/api/';
   motorEndpoint = 'motor';
   dispenseFoodEndpoint = 'dispense-food';
+  scheduleEndpoint = 'schedule';
 
   startMotor() {
-    controlMotor('start');
+    this.controlMotor('start');
   }
 
   stopMotor() {
-    controlMotor('stop');
+    this.controlMotor('stop');
   }
 
+  dispenseFood(amount) {
+    this.sendPostRequest(this.dispenseFoodEndpoint, {
+      amount: amount,
+    });
+  }
+
+  getFoodSchedule() {
+    return this.sendGetRequest(this.scheduleEndpoint, null);
+  }
+
+  // [amounts] must be an array of float
+  // [times] must be an array of Datetime in ISO format
+  updateFoodSchedule(amounts, times) {
+    this.sendPostRequest(this.scheduleEndpoint, {
+      food: {
+        amounts: amounts,
+        times: times,
+      },
+    });
+  }
+
+  // Helper methods //
   controlMotor(action) {
     data = {
       action: action,
@@ -20,13 +44,27 @@ class ApiHelper {
   }
 
   sendPostRequest(endpoint, data) {
-    fetch(this.baseUrl + endpoint, {
-      method: 'POST',
+    buildRequest('POST', endpoint, data);
+  }
+
+  async sendGetRequest(endpoint) {
+    try {
+      const response = await this.buildRequest('GET', endpoint, null);
+      const json = await response.json();
+      return json;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  buildRequest(method, endpoint, data) {
+    return fetch(this.baseUrl + endpoint, {
+      method: method,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: data == null ? null : JSON.stringify(data),
     });
   }
 }
