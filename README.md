@@ -5,6 +5,7 @@ Use the following commands to run the project.
 - `cd Automatic-Pet-Feeder`
 - `npm install --global yarn` (if yarn is not already installed)
 - `yarn`
+- `nvm use node` (to use the latest version of node)
 - `yarn start`
 
 The web server is the one that controls the different components in the Pet Feeder.
