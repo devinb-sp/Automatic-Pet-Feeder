@@ -3,10 +3,10 @@ import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
-import styles from '../util/styles';
 import { ApiHelper } from '../helpers/api_helper';
 ('../helpers/api_helper');
 import DropDownPicker from 'react-native-dropdown-picker';
+import settingsStyles from '../stylesheets/settingsStyles';
 
 const apiHelper = new ApiHelper();
 
@@ -40,11 +40,11 @@ const Settings = () => {
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text style={{ fontFamily: 'RobotoBlack', fontSize: 50 }}>Settings</Text>
       <Text>EMAIL: {auth.currentUser?.email}</Text>
-      <TouchableOpacity onPress={handleSignOut} style={styles.textButton}>
-        <Text style={styles.textButtonText}>SIGN OUT</Text>
+      <TouchableOpacity onPress={handleSignOut} style={settingsStyles.textButton}>
+        <Text style={settingsStyles.textButtonText}>SIGN OUT</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={handleGetSchedule} style={styles.textButton}>
-        <Text style={styles.textButtonText}>Get schedule</Text>
+      <TouchableOpacity onPress={handleGetSchedule} style={settingsStyles.textButton}>
+        <Text style={settingsStyles.textButtonText}>Get schedule</Text>
       </TouchableOpacity>
       <Text style={{ fontFamily: 'RobotoBlack', fontSize: 20 }}>Food Schedule</Text>
       {foodAmounts?.map((amount, index) => (
@@ -55,8 +55,8 @@ const Settings = () => {
         />
       ))}
       <FoodFrequencyDropdown />
-      <TouchableOpacity onPress={handleUpdateSchedule} style={styles.textButton}>
-        <Text style={styles.textButtonText}>Update Schedule</Text>
+      <TouchableOpacity onPress={handleUpdateSchedule} style={settingsStyles.textButton}>
+        <Text style={settingsStyles.textButtonText}>Update Schedule</Text>
       </TouchableOpacity>
     </View>
   );
@@ -104,7 +104,7 @@ const FoodFrequencyDropdown = (_) => {
   }
 
   return (
-    <View style={styles.dropdown}>
+    <View style={settingsStyles.dropdown}>
       <DropDownPicker
         open={open}
         value={value}
@@ -121,11 +121,11 @@ const FoodFrequencyDropdown = (_) => {
 // For the Time Picker please look into https://github.com/henninghall/react-native-date-picker
 const SelectTimeAndAmount = (props) => {
   return (
-    <View style={styles.center}>
+    <View style={settingsStyles.center}>
       <Text key={props.index}>Setting {props.index + 1}</Text>
-      <View style={styles.rowContainer}>
-        <TextInput key={'amount'} placeholder="Amount" onChangeText={(text) => {}} style={styles.input} />
-        <TextInput key={'time'} placeholder="Time picker" onChangeText={(text) => {}} style={styles.input} />
+      <View style={settingsStyles.rowContainer}>
+        <TextInput key={'amount'} placeholder="Amount" onChangeText={(text) => {}} style={settingsStyles.input} />
+        <TextInput key={'time'} placeholder="Time picker" onChangeText={(text) => {}} style={settingsStyles.input} />
       </View>
     </View>
   );
@@ -133,14 +133,14 @@ const SelectTimeAndAmount = (props) => {
 
 const AmountAndTimeScheduleInput = (props) => {
   return (
-    <View style={styles.center}>
-      <View style={styles.rowContainer}>
+    <View style={settingsStyles.center}>
+      <View style={settingsStyles.rowContainer}>
         <TextInput
           key={props.amount}
           placeholder="Amount"
           value={props.amount.toString()}
           onChangeText={(text) => {}}
-          style={styles.input}
+          style={settingsStyles.input}
         />
         <Text key={props.amount.toString() + 'text'}>Cups</Text>
       </View>
@@ -149,7 +149,7 @@ const AmountAndTimeScheduleInput = (props) => {
         placeholder="Time"
         value={props.time.toString()}
         onChangeText={(text) => {}}
-        style={styles.input}
+        style={settingsStyles.input}
       />
     </View>
   );
