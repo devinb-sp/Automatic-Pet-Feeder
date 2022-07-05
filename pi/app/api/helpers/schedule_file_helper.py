@@ -11,7 +11,6 @@ FILE_PATH = os.path.join(os.path.dirname(__file__), FILENAME)
 def read_schedule_data():
     '''Reads the data from the json file'''
     try:
-
         with open(FILE_PATH, 'r+', encoding='utf-8') as file:
             data = json.load(file)
 

@@ -110,10 +110,9 @@ void dispenseFoodAction()
 {
   while (Serial.available() <= 0);
   
-  float amount = Serial.read();
-
+  float amount = Serial.parseFloat();
   startMotorAction();
-  delay(amount * (float) MILLIS_FOR_CUP);
+  delay((int)(amount * MILLIS_FOR_CUP));
   stopMotorAction();
 }
 

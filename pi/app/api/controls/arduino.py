@@ -47,6 +47,9 @@ class Arduino:
         '''Stops motor'''
         self.__perform_action(self.actions['stop_pump'])
 
-    def dispense_food(self, amount: float):
+    def dispense_food(self, amount):
         '''Dispenses food, [amount] describes the amount of food in half a cup '''
-        self.__perform_action(self.actions['dispense_food'], args=[amount])
+        self.start_motor()
+        sleep(int(amount * 120000)/1000)
+        self.stop_motor()
+        

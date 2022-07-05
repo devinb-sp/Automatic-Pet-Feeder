@@ -36,7 +36,9 @@ class ScheduleHelper:
 
             if result != 200:
                 return result
-
+        
+        print('JOSE:')
+        print(data)
         did_update = modify_schedule_data(data)
 
         if not did_update:

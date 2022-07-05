@@ -34,7 +34,7 @@ def dispense_food():
        THIS DOES NOT INVALIDATE SCHEDULER'''
     data = request.get_json()
 
-    arduino.dispense_food(data['amount'] or 1)
+    arduino.dispense_food(data['amount'] or 1.0)
 
     return make_response('', 204)
 
