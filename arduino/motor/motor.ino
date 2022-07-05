@@ -28,6 +28,9 @@ void controlDcComponent(int pin, int value, int in1Pin, int in1Value, int in2Pin
 void setupDcComponent(int pin, int in1, int in2);
 void readForceSensor(int pin, void (*startFunc)(), void (*stopFunc)());
 
+int waterSensor = 0;
+bool flag = true;
+
 void setup() {
   Serial.begin(9600);
   setUpMotor();
@@ -35,8 +38,16 @@ void setup() {
 }
 
 void loop() {
-  readWaterForceSensor();
-  readFoodForceSensor();
+  waterSensor = analogRead(WATER_FORCE_SENSOR_PIN);
+  
+  if (flag) {
+    readWaterForceSensor();
+  } else {
+    wait();
+  }
+   readFoodForceSensor();
+
+
   
   if (Serial.available() > 0)
   {
@@ -122,28 +133,37 @@ void setupDcComponent(int pin, int in1, int in2)
 
 void readWaterForceSensor()
 {
-  readForceSensor(WATER_FORCE_SENSOR_PIN, startPumpAction, stopPumpAction);
+  readForceSensor(startPumpAction, stopPumpAction);
 }
 
 void readFoodForceSensor()
 {
 }
 
-void readForceSensor(int pin, void (*startFunc)(), void (*stopFunc)())
+void readForceSensor(void (*startFunc)(), void (*stopFunc)())
 {
-  int sensorReading = analogRead(pin);
+  Serial.println(waterSensor);
 
-  if (sensorReading < 400)
-  {
+  if (waterSensor < 90) {
     stopPumpAction();
-  }
-  else if (sensorReading < 640) // from 10 to 199
-  {
+  } else if (waterSensor < 450) {
     startPumpAction();
+  } else {
+    stopPumpAction();
+    flag = false;
+    return;
   }
 
-  if (sensorReading >= 740) // from 800 to 1023
-  {
-    stopPumpAction();
-  }
+  delay(500);
+}
+
+void wait() {
+    Serial.println("wait...");
+    Serial.println(waterSensor);
+
+    if (waterSensor < 300) {
+      flag = true;
+      return;
+    }
+    delay(500);
 }
