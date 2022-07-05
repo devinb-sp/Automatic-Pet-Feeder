@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
     width: '90%',
     justifyContent: 'center',
     alignItems: 'center',
-    //marginTop: 10,
   },
   button: {
     backgroundColor: '#5363B6',
@@ -70,6 +69,12 @@ const styles = StyleSheet.create({
   },
   rowContainer: {
     flexDirection: 'row',
+  },
+  dropdown: {
+    zIndex: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 16,
   },
 });
 
