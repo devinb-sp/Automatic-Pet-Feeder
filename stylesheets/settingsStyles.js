@@ -1,3 +1,4 @@
+import { AuthErrorCodes } from 'firebase/auth';
 import { StyleSheet, Platform } from 'react-native';
 
 const settingsStyles = StyleSheet.create({
@@ -25,6 +26,18 @@ const settingsStyles = StyleSheet.create({
     fontFamily: 'RobotoRegular',
     borderColor: 'lightgray',
     borderWidth: 1,
+  },
+  dropdowns: {
+    backgroundColor: 'white',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    fontFamily: 'RobotoRegular',
+    borderColor: 'lightgray',
+    borderWidth: 1,
+    width: '90%',
+    marginRight: 'auto',
+    marginLeft: 'auto',
+    marginBottom: 10,
   },
   buttons: {
     backgroundColor: '#5363B6',

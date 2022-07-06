@@ -21,6 +21,15 @@ const Settings = () => {
   const [show, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
 
+  // Dropdown
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState('0.25');
+  const [items, setItems] = useState([
+    { label: '1/4 Cup', value: '0.25' },
+    { label: '1/2 Cup', value: '0.5' },
+    { label: '1 Cup', value: '1' },
+  ]);
+
   useEffect(() => {
     changeDisplayTime();
   }, []);
@@ -50,11 +59,22 @@ const Settings = () => {
     setDisplayTime(time);
   };
 
-  const changeDisplayTime = () => {
-    let date = moment();
-    let time = moment(date, 'h:mm A').format('h:mm A');
+  const changeDisplayTime = async () => {
+    const result = await apiHelper.getFoodSchedule();
+    var date = moment(result.food.times[0]);
+    let time = date.format('h:mm A');
 
     setDisplayTime(time);
+  };
+
+  const onPressCancel = async () => {
+    setShow(false);
+    const result = await apiHelper.getFoodSchedule();
+    var date = moment(result.food.times[0]);
+    let time = date.format('h:mm A');
+
+    setDisplayTime(time);
+    setDate(new Date(result.food.times[0]));
   };
 
   const navigation = useNavigation();
@@ -78,7 +98,7 @@ const Settings = () => {
   const handleUpdateSchedule = async () => {
     console.log(amount);
     console.log(time);
-    apiHelper.updateFoodSchedule([parseFloat(amount)], [time]);
+    apiHelper.updateFoodSchedule([parseFloat(value)], [time]);
   };
 
   const startMotorButton = async () => {
@@ -107,13 +127,36 @@ const Settings = () => {
         />
       ))}
       {/* <FoodFrequencyDropdown /> */}
+
+      <DropDownPicker
+        style={settingsStyles.dropdowns}
+        dropDownContainerStyle={{
+          paddingVertical: 15,
+          paddingHorizontal: 10,
+          fontFamily: 'RobotoRegular',
+          borderColor: 'lightgray',
+          borderWidth: 1,
+          width: '90%',
+          marginRight: '5%',
+          marginLeft: '5%',
+          marginBottom: 20,
+        }}
+        placeholder="Select amount of food"
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+      />
+
       <View style={settingsStyles.fieldsContainer}>
-        <TextInput
+        {/* <TextInput
           key={'amount'}
           placeholder="Amount"
           onChangeText={(val) => setAmount(val)}
           style={settingsStyles.fields}
-        />
+        /> */}
 
         <TouchableHighlight underlayColor={'transparent'} activeOpacity={0} onPress={() => showDateTime()}>
           <View>
@@ -165,7 +208,7 @@ const Settings = () => {
 
                       <TouchableHighlight
                         underlayColor={'transparent'}
-                        //onPress={onPressCancel}
+                        onPress={onPressCancel}
                         style={[settingsStyles.btnText, settingsStyles.btnCancel]}
                       >
                         <Text>Cancel</Text>
@@ -173,7 +216,7 @@ const Settings = () => {
 
                       <TouchableHighlight
                         underlayColor={'transparent'}
-                        onPress={handleUpdateSchedule}
+                        onPress={() => setShow(false)}
                         style={[settingsStyles.btnText, settingsStyles.btnDone]}
                       >
                         <Text>Done</Text>
@@ -187,17 +230,10 @@ const Settings = () => {
         </TouchableHighlight>
       </View>
 
-      {/* {show && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={date}
-            mode="time"
-            display="spinner"
-            is24Hour={false}
-            onChange={changeDateTime}
-          />
-        )} */}
       <View style={settingsStyles.fieldsContainer}>
+        <TouchableOpacity onPress={handleUpdateSchedule} style={settingsStyles.buttons}>
+          <Text style={settingsStyles.buttonsText}>Save Schedule</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={startMotorButton} style={settingsStyles.buttons}>
           <Text style={settingsStyles.buttonsText}>Start Motor</Text>
         </TouchableOpacity>
