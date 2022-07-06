@@ -34,8 +34,14 @@ const Settings = () => {
     changeDisplayTime();
   }, []);
 
-  const showDateTime = () => {
+  const showDateTime = async () => {
     setShow(!show);
+    const result = await apiHelper.getFoodSchedule();
+    var date = moment(result.food.times[0]);
+    let time = date.format('h:mm A');
+
+    setDisplayTime(time);
+    setDate(new Date(result.food.times[0]));
   };
 
   const changeDateTime = (event, selectedDate) => {
@@ -64,6 +70,9 @@ const Settings = () => {
     var date = moment(result.food.times[0]);
     let time = date.format('h:mm A');
 
+    console.log(result.food.amounts[0]);
+
+    setValue(result.food.amounts[0].toString());
     setDisplayTime(time);
   };
 
@@ -113,19 +122,7 @@ const Settings = () => {
     <View style={settingsStyles.container}>
       {/* <Text style={{ fontFamily: 'RobotoBlack', fontSize: 50 }}>Settings</Text> */}
       <Text style={{ fontFamily: 'RobotoBlack', fontSize: 20, width: '90%', marginBottom: 20 }}>Food Schedule</Text>
-      <View style={settingsStyles.fieldsContainer}>
-        <TouchableOpacity onPress={handleGetSchedule} style={settingsStyles.buttons}>
-          <Text style={settingsStyles.buttonsText}>Get schedule</Text>
-        </TouchableOpacity>
-      </View>
 
-      {foodAmounts?.map((amount, index) => (
-        <AmountAndTimeScheduleInput
-          key={amount}
-          amount={amount}
-          time={new Date(Date.parse(foodTimes[index])).toLocaleTimeString() ?? ''}
-        />
-      ))}
       {/* <FoodFrequencyDropdown /> */}
 
       <DropDownPicker

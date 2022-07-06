@@ -17,33 +17,37 @@ const Camera = () => {
         source={{
           uri: 'http://192.168.1.83:8000/index.html',
         }}
-        style={{ marginTop: 20 }}
+        style={{ width: '90%', marginRight: 'auto', marginLeft: 'auto', marginTop: 20 }}
         startInLoadingState={true}
       />
-      <TouchableOpacity
-        onPress={() => {
-          apiHelper.initializeCameraFeed();
-        }}
-        style={settingsStyles.buttons}
-      >
-        <Text style={settingsStyles.buttonsText}>Start Feed</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => {
-          apiHelper.stopCameraFeed();
-        }}
-        style={settingsStyles.buttons}
-      >
-        <Text style={settingsStyles.buttonsText}>Stop Feed</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        onpress={() => {
-          WebViewRef && WebViewRef.reload();
-        }}
-        style={settingsStyles.buttons}
-      >
-        <Text style={settingsStyles.buttonsText}>Reload</Text>
-      </TouchableOpacity>
+      <View style={settingsStyles.container}>
+        <View style={settingsStyles.fieldsContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              apiHelper.initializeCameraFeed();
+            }}
+            style={settingsStyles.buttons}
+          >
+            <Text style={settingsStyles.buttonsText}>Start Feed</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              apiHelper.stopCameraFeed();
+            }}
+            style={settingsStyles.buttons}
+          >
+            <Text style={settingsStyles.buttonsText}>Stop Feed</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onpress={() => {
+              WebViewRef && WebViewRef.reload();
+            }}
+            style={settingsStyles.buttons}
+          >
+            <Text style={settingsStyles.buttonsText}>Reload</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </>
   );
 };
