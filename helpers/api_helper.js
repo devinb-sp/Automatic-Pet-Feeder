@@ -4,6 +4,8 @@ export class ApiHelper {
   motorEndpoint = 'motor';
   dispenseFoodEndpoint = 'dispense-food';
   scheduleEndpoint = 'schedule';
+  initializeFeedEndpoint = 'initialize-feed';
+  stopFeedEndpoint = 'stop-feed';
 
   startMotor() {
     this.controlMotor('start');
@@ -17,6 +19,14 @@ export class ApiHelper {
     this.sendPostRequest(this.dispenseFoodEndpoint, {
       amount: amount,
     });
+  }
+
+  initializeCameraFeed() {
+    this.sendPostRequest(this.initializeFeedEndpoint, null);
+  }
+
+  stopCameraFeed() {
+    this.sendPostRequest(this.stopFeedEndpoint, null);
   }
 
   getFoodSchedule() {
