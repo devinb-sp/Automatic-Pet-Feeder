@@ -26,7 +26,9 @@ export class ApiHelper {
   // [amounts] must be an array of float
   // [times] must be an array of Datetime in ISO format
   updateFoodSchedule(amounts, times) {
-    this.sendPostRequest(this.scheduleEndpoint, {
+    console.log('amount (in api helper): ' + amounts);
+    console.log('time (in api helper): ' + times);
+    this.sendPutRequest(this.scheduleEndpoint, {
       food: {
         amounts: amounts,
         times: times,
@@ -44,7 +46,10 @@ export class ApiHelper {
   }
 
   sendPostRequest(endpoint, data) {
-    buildRequest('POST', endpoint, data);
+    this.buildRequest('POST', endpoint, data);
+  }
+  sendPutRequest(endpoint, data) {
+    this.buildRequest('PUT', endpoint, data);
   }
 
   async sendGetRequest(endpoint) {

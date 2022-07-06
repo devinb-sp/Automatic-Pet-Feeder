@@ -44,8 +44,6 @@ const Login = () => {
 
   return (
     <KeyboardAvoidingView style={loginStyles.container} behavior="padding">
-      <Text style={loginStyles.welcomeText}>WELCOME</Text>
-      <Text style={loginStyles.subtext}>To your automatic pet feeder</Text>
       <Image style={loginStyles.image} source={petFeederImage}></Image>
       <View style={loginStyles.inputContainer}>
         <TextInput

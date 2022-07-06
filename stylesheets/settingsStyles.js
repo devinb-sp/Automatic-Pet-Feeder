@@ -3,62 +3,9 @@ import { StyleSheet, Platform } from 'react-native';
 const settingsStyles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-  },
-  welcomeText: {
-    fontFamily: 'RobotoBlack',
-    fontSize: 50,
-    marginBottom: 0,
-    marginTop: 40,
-  },
-  subtext: {
-    fontFamily: 'RobotoRegular',
-    marginTop: -10,
-    marginBottom: 40,
-  },
-  image: {
-    resizeMode: 'contain',
-    height: '30%',
-    width: '100%',
-    marginBottom: 40,
-  },
-  inputContainer: {
-    width: '90%',
-  },
-  input: {
-    backgroundColor: 'white',
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    marginBottom: 10,
-    fontFamily: 'RobotoRegular',
-    borderColor: 'lightgray',
-    borderWidth: 1,
-  },
-  buttonContainer: {
-    width: '90%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  button: {
-    backgroundColor: '#5363B6',
-    paddingVertical: 12,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 5,
-    borderColor: 'rgba(0, 0, 0, 0.3)',
-    borderWidth: 1,
-  },
-  buttonText: {
-    fontFamily: 'RobotoRegular',
-    color: 'white',
-  },
-  signUpQuestion: {
-    fontFamily: 'RobotoRegular',
-    color: 'gray',
     marginTop: 20,
-    fontSize: 12,
   },
   textButton: {
     marginTop: 2,
@@ -67,14 +14,52 @@ const settingsStyles = StyleSheet.create({
     fontFamily: 'RobotoMedium',
     color: '#5363B6',
   },
-  rowContainer: {
-    flexDirection: 'row',
+  fieldsContainer: {
+    width: '90%',
   },
-  dropdown: {
-    zIndex: 100,
+  fields: {
+    backgroundColor: 'white',
+    paddingVertical: 15,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    fontFamily: 'RobotoRegular',
+    borderColor: 'lightgray',
+    borderWidth: 1,
+  },
+  buttons: {
+    backgroundColor: '#5363B6',
+    paddingVertical: 12,
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 16,
+    borderRadius: 5,
+    borderColor: 'rgba(0, 0, 0, 0.3)',
+    borderWidth: 1,
+    marginBottom: 10,
+  },
+  buttonsText: {
+    fontFamily: 'RobotoRegular',
+    color: 'white',
+  },
+  btnText: {
+    position: 'absolute',
+    top: 0,
+    height: 42,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  btnCancel: {
+    left: 0,
+  },
+  btnDone: {
+    right: 0,
+  },
+  signOutContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
   },
 });
 

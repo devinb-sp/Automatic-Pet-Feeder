@@ -6,17 +6,6 @@ const loginStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  welcomeText: {
-    fontFamily: 'RobotoBlack',
-    fontSize: 50,
-    marginBottom: 0,
-    marginTop: 40,
-  },
-  subtext: {
-    fontFamily: 'RobotoRegular',
-    marginTop: -10,
-    marginBottom: 40,
-  },
   image: {
     resizeMode: 'contain',
     height: '30%',
