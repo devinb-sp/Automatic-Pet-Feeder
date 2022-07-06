@@ -109,6 +109,24 @@ void stopPumpAction()
 void dispenseFoodAction()
 {
   while (Serial.available() <= 0);
+//  static size_t pos;
+//  static char buffer[32];
+//  if (Serial.available())
+//  {
+//    char c = Serial.read();
+//    if (c == '\n')
+//    {
+//      buffer[pos] = '\0';
+//      float amount = atof(buffer);
+//      startMotorAction();
+//      delay((int)(amount * MILLIS_FOR_CUP));
+//      stopMotorAction();
+//    }
+//    else if (pos < sizeof buffer - 1)
+//    {
+//      buffer[pos++] = c;
+//    }
+//  }
   
   float amount = Serial.parseFloat();
   startMotorAction();

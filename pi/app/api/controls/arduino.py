@@ -1,5 +1,6 @@
 '''Controls all the basic functions of the Arduino'''
 from time import sleep
+from datetime import datetime, timedelta
 import serial
 
 PORT = '/dev/ttyACM0'
@@ -27,9 +28,10 @@ class Arduino:
         self.arduino.write(str(action).encode(ENCODING))
 
         if args is not None:
-            sleep(1)
+            sleep(0.5)
             for arg in args:
-                self.arduino.write(str(arg).encode(ENCODING))
+                data = str(arg) + '\n'
+                self.arduino.write(data)
 
     def start_motor(self):
         '''Starts motor'''

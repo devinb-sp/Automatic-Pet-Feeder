@@ -1,12 +1,14 @@
 '''Main communications module for Automatic Pet Feeder'''
 from flask import Flask, request, make_response, jsonify
+from apscheduler.schedulers.background import BackgroundScheduler
 from api.schedule import ScheduleHelper
 from api.controls.arduino import Arduino
 
 app = Flask(__name__)
 
+background_scheduler = BackgroundScheduler(demon=True)
 arduino = Arduino()
-scheduler_helper = ScheduleHelper(arduino)
+scheduler_helper = ScheduleHelper(arduino, background_scheduler)
 
 
 @app.route('/api/schedule', methods=['GET'])

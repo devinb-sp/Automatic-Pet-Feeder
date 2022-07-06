@@ -9,10 +9,9 @@ from api.controls.arduino import Arduino
 class ScheduleHelper:
     '''Helps with scheduling background tasks and reading and writing to file'''
 
-    __scheduler = BackgroundScheduler(demon=True)
-
-    def __init__(self, arduino: Arduino):
+    def __init__(self, arduino: Arduino, background_scheduler):
         self.__arduino = arduino
+        self.__scheduler = background_scheduler
 
     def get_schedule_api(self):
         '''Returns current schedule'''
