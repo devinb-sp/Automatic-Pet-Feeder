@@ -2,7 +2,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFonts } from 'expo-font';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Home from './screens/Home';

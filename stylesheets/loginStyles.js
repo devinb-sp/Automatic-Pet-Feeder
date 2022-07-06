@@ -1,21 +1,10 @@
 import { StyleSheet, Platform } from 'react-native';
 
-const styles = StyleSheet.create({
+const loginStyles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  welcomeText: {
-    fontFamily: 'RobotoBlack',
-    fontSize: 50,
-    marginBottom: 0,
-    marginTop: 40,
-  },
-  subtext: {
-    fontFamily: 'RobotoRegular',
-    marginTop: -10,
-    marginBottom: 40,
   },
   image: {
     resizeMode: 'contain',
@@ -78,4 +67,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default styles;
+export default loginStyles;

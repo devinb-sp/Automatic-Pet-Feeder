@@ -1,18 +1,61 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, TextInput, TouchableHighlight, Modal } from 'react-native';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
-import styles from '../util/styles';
 import { ApiHelper } from '../helpers/api_helper';
 ('../helpers/api_helper');
 import DropDownPicker from 'react-native-dropdown-picker';
+import settingsStyles from '../stylesheets/settingsStyles';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment';
 
 const apiHelper = new ApiHelper();
 
 const Settings = () => {
   const [foodAmounts, setFoodAmounts] = useState([]);
   const [foodTimes, setFoodTimes] = useState([]);
+  const [amount, setAmount] = useState([0]);
+  const [time, setTime] = useState([]);
+  const [displayTime, setDisplayTime] = useState([]);
+  const [show, setShow] = useState(false);
+  const [date, setDate] = useState(new Date());
+
+  useEffect(() => {
+    changeDisplayTime();
+  }, []);
+
+  const showDateTime = () => {
+    setShow(!show);
+  };
+
+  const changeDateTime = (event, selectedDate) => {
+    let time = moment(selectedDate, 'h:mm A').format('h:mm A');
+
+    let convertToISO =
+      selectedDate.getFullYear() +
+      '-' +
+      ('0' + (selectedDate.getMonth() + 1)).slice(-2) +
+      '-' +
+      ('0' + selectedDate.getDate()).slice(-2) +
+      'T' +
+      ('0' + selectedDate.getHours()).slice(-2) +
+      ':' +
+      ('0' + selectedDate.getMinutes()).slice(-2) +
+      ':00.000000';
+
+    console.log(convertToISO);
+    setTime(convertToISO);
+    setDate(selectedDate);
+    setDisplayTime(time);
+  };
+
+  const changeDisplayTime = () => {
+    let date = moment();
+    let time = moment(date, 'h:mm A').format('h:mm A');
+
+    setDisplayTime(time);
+  };
 
   const navigation = useNavigation();
 
@@ -32,21 +75,30 @@ const Settings = () => {
     setFoodTimes(result.food.times);
   };
 
-  const handleUpdateSchedule = async (amounts, times) => {
-    apiHelper.updateFoodSchedule(amounts, times);
+  const handleUpdateSchedule = async () => {
+    console.log(amount);
+    console.log(time);
+    apiHelper.updateFoodSchedule([parseFloat(amount)], [time]);
+  };
+
+  const startMotorButton = async () => {
+    apiHelper.startMotor();
+  };
+
+  const stopMotorButton = async () => {
+    apiHelper.stopMotor();
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={{ fontFamily: 'RobotoBlack', fontSize: 50 }}>Settings</Text>
-      <Text>EMAIL: {auth.currentUser?.email}</Text>
-      <TouchableOpacity onPress={handleSignOut} style={styles.textButton}>
-        <Text style={styles.textButtonText}>SIGN OUT</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleGetSchedule} style={styles.textButton}>
-        <Text style={styles.textButtonText}>Get schedule</Text>
-      </TouchableOpacity>
-      <Text style={{ fontFamily: 'RobotoBlack', fontSize: 20 }}>Food Schedule</Text>
+    <View style={settingsStyles.container}>
+      {/* <Text style={{ fontFamily: 'RobotoBlack', fontSize: 50 }}>Settings</Text> */}
+      <Text style={{ fontFamily: 'RobotoBlack', fontSize: 20, width: '90%', marginBottom: 20 }}>Food Schedule</Text>
+      <View style={settingsStyles.fieldsContainer}>
+        <TouchableOpacity onPress={handleGetSchedule} style={settingsStyles.buttons}>
+          <Text style={settingsStyles.buttonsText}>Get schedule</Text>
+        </TouchableOpacity>
+      </View>
+
       {foodAmounts?.map((amount, index) => (
         <AmountAndTimeScheduleInput
           key={amount}
@@ -54,10 +106,112 @@ const Settings = () => {
           time={new Date(Date.parse(foodTimes[index])).toLocaleTimeString() ?? ''}
         />
       ))}
-      <FoodFrequencyDropdown />
-      <TouchableOpacity onPress={handleUpdateSchedule} style={styles.textButton}>
-        <Text style={styles.textButtonText}>Update Schedule</Text>
-      </TouchableOpacity>
+      {/* <FoodFrequencyDropdown /> */}
+      <View style={settingsStyles.fieldsContainer}>
+        <TextInput
+          key={'amount'}
+          placeholder="Amount"
+          onChangeText={(val) => setAmount(val)}
+          style={settingsStyles.fields}
+        />
+
+        <TouchableHighlight underlayColor={'transparent'} activeOpacity={0} onPress={() => showDateTime()}>
+          <View>
+            <Text style={settingsStyles.fields}>{displayTime}</Text>
+            <Modal
+              transparent={true}
+              animationType="slide"
+              visible={show}
+              supportedOrientations={['portrait']}
+              onRequestClose={() => setShow(false)}
+            >
+              <View style={{ flex: 1 }}>
+                <TouchableHighlight
+                  underlayColor={'transparent'}
+                  style={{
+                    flex: 1,
+                    alignItems: 'flex-end',
+                    flexDirection: 'row',
+                  }}
+                  activeOpacity={1}
+                  visible={show}
+                  onPress={() => setShow(false)}
+                >
+                  <TouchableHighlight
+                    underlayColor={'#FFFFFF'}
+                    style={{
+                      flex: 1,
+                      borderTopColor: '#E9E9E9',
+                      borderTopWidth: 1,
+                    }}
+                  >
+                    <View
+                      style={{
+                        backgroundColor: '#FFFFFF',
+                        height: 256,
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <View style={{ marginTop: 20 }}>
+                        <DateTimePicker
+                          value={date}
+                          mode="time"
+                          display="spinner"
+                          is24Hour={false}
+                          onChange={changeDateTime}
+                          textColor="black"
+                        />
+                      </View>
+
+                      <TouchableHighlight
+                        underlayColor={'transparent'}
+                        //onPress={onPressCancel}
+                        style={[settingsStyles.btnText, settingsStyles.btnCancel]}
+                      >
+                        <Text>Cancel</Text>
+                      </TouchableHighlight>
+
+                      <TouchableHighlight
+                        underlayColor={'transparent'}
+                        onPress={handleUpdateSchedule}
+                        style={[settingsStyles.btnText, settingsStyles.btnDone]}
+                      >
+                        <Text>Done</Text>
+                      </TouchableHighlight>
+                    </View>
+                  </TouchableHighlight>
+                </TouchableHighlight>
+              </View>
+            </Modal>
+          </View>
+        </TouchableHighlight>
+      </View>
+
+      {/* {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode="time"
+            display="spinner"
+            is24Hour={false}
+            onChange={changeDateTime}
+          />
+        )} */}
+      <View style={settingsStyles.fieldsContainer}>
+        <TouchableOpacity onPress={startMotorButton} style={settingsStyles.buttons}>
+          <Text style={settingsStyles.buttonsText}>Start Motor</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={stopMotorButton} style={settingsStyles.buttons}>
+          <Text style={settingsStyles.buttonsText}>Stop Motor</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={settingsStyles.signOutContainer}>
+        <Text>Signed in as {auth.currentUser?.email}</Text>
+        <TouchableOpacity onPress={handleSignOut} style={settingsStyles.textButton}>
+          <Text style={settingsStyles.textButtonText}>SIGN OUT</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -104,7 +258,7 @@ const FoodFrequencyDropdown = (_) => {
   }
 
   return (
-    <View style={styles.dropdown}>
+    <View style={settingsStyles.dropdown}>
       <DropDownPicker
         open={open}
         value={value}
@@ -121,11 +275,21 @@ const FoodFrequencyDropdown = (_) => {
 // For the Time Picker please look into https://github.com/henninghall/react-native-date-picker
 const SelectTimeAndAmount = (props) => {
   return (
-    <View style={styles.center}>
+    <View style={settingsStyles.center}>
       <Text key={props.index}>Setting {props.index + 1}</Text>
-      <View style={styles.rowContainer}>
-        <TextInput key={'amount'} placeholder="Amount" onChangeText={(text) => {}} style={styles.input} />
-        <TextInput key={'time'} placeholder="Time picker" onChangeText={(text) => {}} style={styles.input} />
+      <View style={settingsStyles.rowContainer}>
+        <TextInput
+          key={'amount'}
+          placeholder="Amount"
+          onChangeText={(val) => setAmount(val)}
+          style={settingsStyles.input}
+        />
+        <TextInput
+          key={'time'}
+          placeholder="Time picker"
+          onChangeText={(val) => setTime(val)}
+          style={settingsStyles.input}
+        />
       </View>
     </View>
   );
@@ -133,14 +297,14 @@ const SelectTimeAndAmount = (props) => {
 
 const AmountAndTimeScheduleInput = (props) => {
   return (
-    <View style={styles.center}>
-      <View style={styles.rowContainer}>
+    <View style={settingsStyles.center}>
+      <View style={settingsStyles.rowContainer}>
         <TextInput
           key={props.amount}
           placeholder="Amount"
           value={props.amount.toString()}
           onChangeText={(text) => {}}
-          style={styles.input}
+          style={settingsStyles.input}
         />
         <Text key={props.amount.toString() + 'text'}>Cups</Text>
       </View>
@@ -149,7 +313,7 @@ const AmountAndTimeScheduleInput = (props) => {
         placeholder="Time"
         value={props.time.toString()}
         onChangeText={(text) => {}}
-        style={styles.input}
+        style={settingsStyles.input}
       />
     </View>
   );

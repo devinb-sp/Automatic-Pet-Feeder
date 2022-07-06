@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
+import cameraStyles from '../stylesheets/cameraStyles';
 
 const Camera = () => {
   return (
