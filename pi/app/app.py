@@ -1,10 +1,11 @@
 '''Main communications module for Automatic Pet Feeder'''
-from flask import Flask, request, make_response, jsonify
+from flask import Flask, request, make_response, jsonify, Response
 from apscheduler.schedulers.background import BackgroundScheduler
 from api.controls.arduino import Arduino
 from api.schedule import ScheduleHelper
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, request, make_response, jsonify
+from api.controls.camera_test import initialize_camera, stop_camera_feed
 
 app = Flask(__name__)
 
@@ -98,7 +99,23 @@ def stop_camera():
     #camera_service.stop_streaming()
 
     return make_response('', 200)
+    
+def gen(camera):
+    while True:
+        frame = camera.get_frame()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+               
+@app.route('/api/initialize-feed')
+def initialize_feed():
+    initialize_camera()
+    return make_response('', 200)
+    
+@app.route('/api/stop-feed')
+def stop_feed():
+    stop_camera_feed()
+    return make_response('', 200)
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=False, host='0.0.0.0')
