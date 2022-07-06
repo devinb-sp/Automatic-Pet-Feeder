@@ -1,14 +1,18 @@
 '''Main communications module for Automatic Pet Feeder'''
 from flask import Flask, request, make_response, jsonify
 from apscheduler.schedulers.background import BackgroundScheduler
-from api.schedule import ScheduleHelper
 from api.controls.arduino import Arduino
+from api.schedule import ScheduleHelper
+from api.controls.camera_server import CameraStreamingService
+from apscheduler.schedulers.background import BackgroundScheduler
+from flask import Flask, request, make_response, jsonify
 
 app = Flask(__name__)
 
 background_scheduler = BackgroundScheduler(demon=True)
 arduino = Arduino()
 scheduler_helper = ScheduleHelper(arduino, background_scheduler)
+camera_service = CameraStreamingService()
 
 
 @app.route('/api/schedule', methods=['GET'])
@@ -80,6 +84,22 @@ def pump():
         arduino.stop_pump()
 
     return make_response('', 204)
+
+
+@app.route('/api/start-camera', methods=['POST'])
+def start_camera():
+    '''Endpoint to start camera stream'''
+    camera_service.start_streaming()
+
+    return make_response('', 200)
+
+
+@app.route('/api/stop-camera', methods=['POST'])
+def stop_camera():
+    '''Endpoint to stop camera stream'''
+    camera_service.stop_streaming()
+
+    return make_response('', 200)
 
 
 if __name__ == '__main__':
