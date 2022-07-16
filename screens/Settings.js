@@ -59,7 +59,6 @@ const Settings = () => {
       ('0' + selectedDate.getMinutes()).slice(-2) +
       ':00.000000';
 
-    console.log(convertToISO);
     setTime(convertToISO);
     setDate(selectedDate);
     setDisplayTime(time);

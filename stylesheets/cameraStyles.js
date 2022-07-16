@@ -3,8 +3,12 @@ import { StyleSheet, Platform } from 'react-native';
 const cameraStyles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  },
+  camera: {
+    marginTop: 20,
+    marginRight: 10,
+    marginLeft: 10,
+    marginBottom: 300,
   },
   welcomeText: {
     fontFamily: 'RobotoBlack',

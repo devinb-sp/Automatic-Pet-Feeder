@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFonts } from 'expo-font';
+import { ApiHelper } from './helpers/api_helper';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Home from './screens/Home';
@@ -11,6 +12,7 @@ import Login from './screens/Login';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+const apiHelper = new ApiHelper();
 
 const AfterLogin = () => {
   return (
@@ -34,9 +36,33 @@ const AfterLogin = () => {
         tabBarInactiveTintColor: 'gray',
       })}
     >
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Camera" component={Camera} />
-      <Tab.Screen name="Settings" component={Settings} />
+      <Tab.Screen
+        name="Home"
+        component={Home}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            apiHelper.stopCameraFeed();
+          },
+        })}
+      />
+      <Tab.Screen
+        name="Camera"
+        component={Camera}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            apiHelper.initializeCameraFeed();
+          },
+        })}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={Settings}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            apiHelper.stopCameraFeed();
+          },
+        })}
+      />
     </Tab.Navigator>
   );
 };
