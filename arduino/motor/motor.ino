@@ -161,7 +161,7 @@ void readForceSensor(void (*startFunc)(), void (*stopFunc)())
 {
   Serial.println(waterSensor);
 
-  if (waterSensor < 90) {
+  if (waterSensor < 40) {
     stopPumpAction();
   } else if (waterSensor < 450) {
     startPumpAction();

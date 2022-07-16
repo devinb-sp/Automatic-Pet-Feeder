@@ -106,12 +106,12 @@ def gen(camera):
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
                
-@app.route('/api/initialize-feed')
+@app.route('/api/initialize-feed', methods=['POST'])
 def initialize_feed():
     initialize_camera()
     return make_response('', 200)
     
-@app.route('/api/stop-feed')
+@app.route('/api/stop-feed', methods=['POST'])
 def stop_feed():
     stop_camera_feed()
     return make_response('', 200)
