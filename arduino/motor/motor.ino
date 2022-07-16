@@ -23,6 +23,12 @@
 #define START_PUMP_ACTION 2
 #define STOP_PUMP_ACTION 3
 #define DISPENSE_FOOD_ACTION 4
+#define READ_WATER_DISTANCE_ACTION 5
+#define READ_FOOD_DISTANCE_ACTION 6
+
+// Distance sensors
+#define WATER_TRIG_PIN 13
+#define WATER_ECHO_PIN 12
 
 void controlDcComponent(int pin, int value, int in1Pin, int in1Value, int in2Pin, int in2Value);
 void setupDcComponent(int pin, int in1, int in2);
@@ -35,6 +41,7 @@ void setup() {
   Serial.begin(9600);
   setUpMotor();
   setUpPump();
+  setupWaterDistanceSensor();
 }
 
 void loop() {
@@ -69,6 +76,9 @@ void loop() {
         break;
       case DISPENSE_FOOD_ACTION:
         dispenseFoodAction();
+        break;
+      case READ_WATER_DISTANCE_ACTION:
+        readWaterDistanceSensor();
         break;
       default:
         break;
@@ -141,11 +151,37 @@ void controlDcComponent(int pin, int value, int in1Pin, int in1Value, int in2Pin
   digitalWrite(in2Pin, in2Value);
 }
 
+void readWaterDistanceSensor()
+{
+  digitalWrite(WATER_TRIG_PIN, LOW);
+  delayMicroseconds(2);
+
+  digitalWrite(WATER_TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(WATER_TRIG_PIN, LOW);
+
+  long duration = pulseIn(WATER_ECHO_PIN, HIGH);
+  int distance = duration * 0.034 / 2;
+
+  Serial.println(distance);
+}
+
 void setupDcComponent(int pin, int in1, int in2)
 {
   pinMode(pin, OUTPUT);
   digitalWrite(in1, LOW);
   digitalWrite(in2, LOW);
+}
+
+void setupWaterDistanceSensor()
+{
+  setupDistanceSensor(WATER_ECHO_PIN, WATER_TRIG_PIN);
+}
+
+void setupDistanceSensor(int echoPin, int trigPin)
+{
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
 }
 
 void readWaterForceSensor()
@@ -159,7 +195,6 @@ void readFoodForceSensor()
 
 void readForceSensor(void (*startFunc)(), void (*stopFunc)())
 {
-  Serial.println(waterSensor);
 
   if (waterSensor < 40) {
     stopPumpAction();
@@ -175,8 +210,6 @@ void readForceSensor(void (*startFunc)(), void (*stopFunc)())
 }
 
 void wait() {
-    Serial.println("wait...");
-    Serial.println(waterSensor);
 
     if (waterSensor < 300) {
       flag = true;

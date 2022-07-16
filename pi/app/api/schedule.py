@@ -9,10 +9,17 @@ from api.controls.arduino import Arduino
 class ScheduleHelper:
     '''Helps with scheduling background tasks and reading and writing to file'''
 
-    def __init__(self, arduino: Arduino, background_scheduler):
+    def __init__(self, arduino: Arduino, background_scheduler: BackgroundScheduler):
         self.__arduino = arduino
         self.__scheduler = background_scheduler
 
+    def schedule_water_level_check(self):
+        '''Schedules the water level check'''
+        print('Scheduling the water level check')
+        self.__scheduler.add_job(self.__arduino.read_water_distance,
+                                 'interval',
+                                 seconds=5)
+    
     def get_schedule_api(self):
         '''Returns current schedule'''
         return read_schedule_data()

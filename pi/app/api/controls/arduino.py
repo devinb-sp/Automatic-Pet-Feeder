@@ -16,7 +16,9 @@ class Arduino:
         'start_motor': 1,
         'start_pump': 2,
         'stop_pump': 3,
-        'dispense_food': 4
+        'dispense_food': 4,
+        'read_water_distance': 5,
+        'read_food_distance': 6
     }
 
     def __init__(self):
@@ -54,4 +56,14 @@ class Arduino:
         self.start_motor()
         sleep(int(amount * 120000)/1000)
         self.stop_motor()
+        
+    def read_water_distance(self):
+        print('Checking water level.')
+        self.__perform_action(self.actions['read_water_distance'])
+        sleep(0.5)
+        value = self.arduino.readline().decode(ENCODING).rstrip()
+        print('Checking water level. Value: ', value)
+        return value
+        
+        
         
