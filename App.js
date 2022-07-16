@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -15,6 +16,8 @@ const Stack = createNativeStackNavigator();
 const apiHelper = new ApiHelper();
 
 const AfterLogin = () => {
+  const [isStopped, setIsStopped] = useState(true);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -41,7 +44,10 @@ const AfterLogin = () => {
         component={Home}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
-            apiHelper.stopCameraFeed();
+            if (isStopped == false) {
+              setIsStopped(true);
+              apiHelper.stopCameraFeed();
+            }
           },
         })}
       />
@@ -50,6 +56,7 @@ const AfterLogin = () => {
         component={Camera}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
+            setIsStopped(false);
             apiHelper.initializeCameraFeed();
           },
         })}
@@ -59,7 +66,10 @@ const AfterLogin = () => {
         component={Settings}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
-            apiHelper.stopCameraFeed();
+            if (isStopped == false) {
+              setIsStopped(true);
+              apiHelper.stopCameraFeed();
+            }
           },
         })}
       />

@@ -13,9 +13,6 @@ import moment from 'moment';
 const apiHelper = new ApiHelper();
 
 const Settings = () => {
-  const [foodAmounts, setFoodAmounts] = useState([]);
-  const [foodTimes, setFoodTimes] = useState([]);
-  const [amount, setAmount] = useState([0]);
   const [time, setTime] = useState([]);
   const [displayTime, setDisplayTime] = useState([]);
   const [show, setShow] = useState(false);
@@ -29,6 +26,18 @@ const Settings = () => {
     { label: '1/2 Cup', value: '0.5' },
     { label: '1 Cup', value: '1' },
   ]);
+
+  const navigation = useNavigation();
+
+  const handleSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        navigation.navigate('Login');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
     changeDisplayTime();
@@ -69,8 +78,6 @@ const Settings = () => {
     var date = moment(result.food.times[0]);
     let time = date.format('h:mm A');
 
-    console.log(result.food.amounts[0]);
-
     setValue(result.food.amounts[0].toString());
     setDisplayTime(time);
   };
@@ -85,36 +92,8 @@ const Settings = () => {
     setDate(new Date(result.food.times[0]));
   };
 
-  const navigation = useNavigation();
-
-  const handleSignOut = () => {
-    signOut(auth)
-      .then(() => {
-        navigation.navigate('Login');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  const handleGetSchedule = async () => {
-    const result = await apiHelper.getFoodSchedule();
-    setFoodAmounts(result.food.amounts);
-    setFoodTimes(result.food.times);
-  };
-
   const handleUpdateSchedule = async () => {
-    console.log(amount);
-    console.log(time);
     apiHelper.updateFoodSchedule([parseFloat(value)], [time]);
-  };
-
-  const startMotorButton = async () => {
-    apiHelper.startMotor();
-  };
-
-  const stopMotorButton = async () => {
-    apiHelper.stopMotor();
   };
 
   return (
@@ -147,13 +126,6 @@ const Settings = () => {
       />
 
       <View style={settingsStyles.fieldsContainer}>
-        {/* <TextInput
-          key={'amount'}
-          placeholder="Amount"
-          onChangeText={(val) => setAmount(val)}
-          style={settingsStyles.fields}
-        /> */}
-
         <TouchableHighlight underlayColor={'transparent'} activeOpacity={0} onPress={() => showDateTime()}>
           <View>
             <Text style={settingsStyles.fields}>{displayTime}</Text>
@@ -229,12 +201,6 @@ const Settings = () => {
       <View style={settingsStyles.fieldsContainer}>
         <TouchableOpacity onPress={handleUpdateSchedule} style={settingsStyles.buttons}>
           <Text style={settingsStyles.buttonsText}>Save Schedule</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={startMotorButton} style={settingsStyles.buttons}>
-          <Text style={settingsStyles.buttonsText}>Start Motor</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={stopMotorButton} style={settingsStyles.buttons}>
-          <Text style={settingsStyles.buttonsText}>Stop Motor</Text>
         </TouchableOpacity>
       </View>
 
