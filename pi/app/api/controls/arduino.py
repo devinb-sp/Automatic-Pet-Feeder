@@ -1,6 +1,7 @@
 '''Controls all the basic functions of the Arduino'''
 from time import sleep
 from datetime import datetime, timedelta
+from api.firebase.firebase_helper import FirebaseHelper
 import serial
 
 PORT = '/dev/ttyACM0'
@@ -10,6 +11,8 @@ ENCODING = 'utf-8'
 
 class Arduino:
     '''Class representing the Arduino and all its basic functions'''
+    
+    last_notification_sent_time = None
 
     actions = {
         'stop_motor': 0,
@@ -21,8 +24,9 @@ class Arduino:
         'read_food_distance': 6
     }
 
-    def __init__(self):
+    def __init__(self, firebase_helper: FirebaseHelper):
         self.arduino = serial.Serial(PORT, BAUD_RATE)
+        self.firebase_helper = firebase_helper
 
     def __perform_action(self, action: int, args: list = None):
         '''Base control by passing an action'''
@@ -58,11 +62,19 @@ class Arduino:
         self.stop_motor()
         
     def read_water_distance(self):
-        print('Checking water level.')
         self.__perform_action(self.actions['read_water_distance'])
         sleep(0.5)
         value = self.arduino.readline().decode(ENCODING).rstrip()
-        print('Checking water level. Value: ', value)
+        if (int(value) < 24):
+            if (self.last_notification_sent_time == None):
+                self.last_notification_sent_time = datetime.now()
+                self.firebase_helper.send_notification_message('token', {'title': 'Water level low', 'body':'The level of the water in the container is low. Please refill to avoid interruptions'})
+                print('Must send water low notification here')
+            else:
+                print('Notification was sent, not doing anything now')
+        else:
+            self.last_notification_sent_time = None
+            print('Reset last notification sent to null')
         return value
         
         

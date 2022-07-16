@@ -2,7 +2,7 @@
 from flask import Flask, request, make_response, jsonify, Response
 from apscheduler.schedulers.background import BackgroundScheduler
 from api.controls.arduino import Arduino
-from api.controls.distance_sensor import DistanceSensor
+from api.firebase.firebase_helper import FirebaseHelper
 from api.schedule import ScheduleHelper
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, request, make_response, jsonify
@@ -11,7 +11,8 @@ from api.controls.camera_test import initialize_camera, stop_camera_feed
 app = Flask(__name__)
 
 background_scheduler = BackgroundScheduler(demon=True)
-arduino = Arduino()
+firebase_helper = FirebaseHelper()
+arduino = Arduino(firebase_helper)
 scheduler_helper = ScheduleHelper(arduino, background_scheduler)
 scheduler_helper.schedule_water_level_check()
 

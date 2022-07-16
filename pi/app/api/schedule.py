@@ -12,6 +12,7 @@ class ScheduleHelper:
     def __init__(self, arduino: Arduino, background_scheduler: BackgroundScheduler):
         self.__arduino = arduino
         self.__scheduler = background_scheduler
+        self.__scheduler.start()
 
     def schedule_water_level_check(self):
         '''Schedules the water level check'''
