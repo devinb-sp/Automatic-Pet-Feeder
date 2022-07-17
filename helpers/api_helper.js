@@ -6,6 +6,8 @@ export class ApiHelper {
   scheduleEndpoint = 'schedule';
   initializeFeedEndpoint = 'initialize-feed';
   stopFeedEndpoint = 'stop-feed';
+  getWaterDistanceEndpoint = 'get-water-distance';
+  getFoodDistanceEndpoint = 'get-food-distance';
 
   startMotor() {
     this.controlMotor('start');
@@ -31,6 +33,28 @@ export class ApiHelper {
 
   getFoodSchedule() {
     return this.sendGetRequest(this.scheduleEndpoint, null);
+  }
+
+  async getWaterLevel() {
+    return await getLevel(this.getWaterDistanceEndpoint, 4, 24, 100, 0);
+  }
+
+  async getFoodLevel() {
+    return await getLevel(this.getFoodDistanceEndpoint, 4, 24, 100, 0);
+  }
+
+  async getLevel(endpoint, inMax, inMin, outMax, outMin) {
+    distance = await this.sendGetRequest(endpoint)['distance'];
+
+    if (distance < inMin) {
+      distance = inMin;
+    }
+
+    if (distance > inMax) {
+      distance = inMax;
+    }
+
+    return ((distance - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
   }
 
   // [amounts] must be an array of float

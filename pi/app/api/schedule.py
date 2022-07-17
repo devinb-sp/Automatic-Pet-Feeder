@@ -20,7 +20,14 @@ class ScheduleHelper:
         self.__scheduler.add_job(self.__arduino.read_water_distance,
                                  'interval',
                                  seconds=5)
-    
+
+    def schedule_food_level_check(self):
+        '''Schedules the food level check'''
+        print('Scheduling the food level check')
+        self.__scheduler.add_job(self.__arduino.read_food_distance,
+                                 'interval',
+                                 seconds=5)
+
     def get_schedule_api(self):
         '''Returns current schedule'''
         return read_schedule_data()
@@ -43,7 +50,7 @@ class ScheduleHelper:
 
             if result != 200:
                 return result
-        
+
         print('JOSE:')
         print(data)
         did_update = modify_schedule_data(data)

@@ -15,6 +15,7 @@ firebase_helper = FirebaseHelper()
 arduino = Arduino(firebase_helper)
 scheduler_helper = ScheduleHelper(arduino, background_scheduler)
 scheduler_helper.schedule_water_level_check()
+scheduler_helper.schedule_food_level_check()
 
 
 @app.route('/api/schedule', methods=['GET'])
@@ -91,7 +92,7 @@ def pump():
 @app.route('/api/start-camera', methods=['POST'])
 def start_camera():
     '''Endpoint to start camera stream'''
-    #camera_service.start_streaming()
+    # camera_service.start_streaming()
 
     return make_response('', 200)
 
@@ -99,30 +100,45 @@ def start_camera():
 @app.route('/api/stop-camera', methods=['POST'])
 def stop_camera():
     '''Endpoint to stop camera stream'''
-    #camera_service.stop_streaming()
+    # camera_service.stop_streaming()
 
     return make_response('', 200)
-    
+
+
 def gen(camera):
     while True:
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-               
+
+
 @app.route('/api/initialize-feed', methods=['POST'])
 def initialize_feed():
+    '''Initializes camera feed'''
     initialize_camera()
     return make_response('', 200)
-    
+
+
 @app.route('/api/stop-feed', methods=['POST'])
 def stop_feed():
+    '''Stops camera feed'''
     stop_camera_feed()
     return make_response('', 200)
-    
-@app.route('/api/get-distance', methods=['GET'])
-def get_distance():
-    distance = arduino.read_water_distance();
-    
+
+
+@app.route('/api/get-water-distance', methods=['GET'])
+def get_water_distance():
+    '''Gets the water distance from top of container'''
+    distance = arduino.read_water_distance()
+
+    return make_response(jsonify({'distance': distance}), 200)
+
+
+@app.route('/api/get-food-distance', methods=['GET'])
+def get_food_distance():
+    '''Gets the water distance from top of container'''
+    distance = arduino.read_food_distance()
+
     return make_response(jsonify({'distance': distance}), 200)
 
 
