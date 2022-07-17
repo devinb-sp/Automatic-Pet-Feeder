@@ -60,8 +60,8 @@ class Arduino:
     def dispense_food(self, amount):
         '''Dispenses food, [amount] describes the amount of food in half a cup '''
         self.start_motor()
-        delay_action = threading.Timer(int(amount * 120000)/1000, self.stop_motor)
-        delay_action.start()
+        sleep(int(amount * 120000)/1000)
+        self.stop_motor()
 
     def read_water_distance(self):
         '''Reads the distance from the top of the container to the water'''
