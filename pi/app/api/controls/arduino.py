@@ -5,7 +5,7 @@ from api.firebase.firebase_helper import FirebaseHelper
 import serial
 import threading
 
-PORT = '/dev/ttyACM0'
+PORT = '/dev/ttyUSB0'
 BAUD_RATE = 9600
 ENCODING = 'utf-8'
 

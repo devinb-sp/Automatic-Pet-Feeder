@@ -29,8 +29,8 @@
 // Distance sensors
 #define WATER_TRIG_PIN 13
 #define WATER_ECHO_PIN 12
-#define FOOD_TRIG_PIN 11
-#define FOOD_ECHO_PIN 10
+#define FOOD_TRIG_PIN A4
+#define FOOD_ECHO_PIN A5
 
 void controlDcComponent(int pin, int value, int in1Pin, int in1Value, int in2Pin, int in2Value);
 void setupDcComponent(int pin, int in1, int in2);
