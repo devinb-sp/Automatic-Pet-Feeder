@@ -97,3 +97,8 @@ class Arduino:
             self.last_food_notification_sent_time = None
             print('Reset last notification sent to None')
         return value
+
+    def read_sensor_distances(self):
+        '''Reads both distance sensors'''
+        self.read_food_distance()
+        self.read_water_distance()
