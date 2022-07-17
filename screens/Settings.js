@@ -17,6 +17,7 @@ const Settings = () => {
   const [displayTime, setDisplayTime] = useState([]);
   const [show, setShow] = useState(false);
   const [date, setDate] = useState(new Date());
+  const [donePressed, setDonePressed] = useState(false);
 
   // Dropdown
   const [open, setOpen] = useState(false);
@@ -45,16 +46,19 @@ const Settings = () => {
 
   const showDateTime = async () => {
     setShow(!show);
-    const result = await apiHelper.getFoodSchedule();
-    var date = moment(result.food.times[0]);
-    let time = date.format('h:mm A');
 
-    setDisplayTime(time);
-    setDate(new Date(result.food.times[0]));
+    if (!donePressed) {
+      const result = await apiHelper.getFoodSchedule();
+      var tempDate = moment(result.food.times[0]);
+      let tempTime = tempDate.format('h:mm A');
+
+      setDisplayTime(tempTime);
+      setDate(new Date(result.food.times[0]));
+    }
   };
 
   const changeDateTime = (event, selectedDate) => {
-    let time = moment(selectedDate, 'h:mm A').format('h:mm A');
+    let tempTime = moment(selectedDate, 'h:mm A').format('h:mm A');
 
     let convertToISO =
       selectedDate.getFullYear() +
@@ -70,26 +74,31 @@ const Settings = () => {
 
     setTime(convertToISO);
     setDate(selectedDate);
-    setDisplayTime(time);
+    setDisplayTime(tempTime);
   };
 
   const changeDisplayTime = async () => {
     const result = await apiHelper.getFoodSchedule();
-    var date = moment(result.food.times[0]);
-    let time = date.format('h:mm A');
+    var tempDate = moment(result.food.times[0]);
+    let tempTime = tempDate.format('h:mm A');
 
     setValue(result.food.amounts[0].toString());
-    setDisplayTime(time);
+    setDisplayTime(tempTime);
   };
 
   const onPressCancel = async () => {
     setShow(false);
     const result = await apiHelper.getFoodSchedule();
-    var date = moment(result.food.times[0]);
-    let time = date.format('h:mm A');
+    var tempDate = moment(result.food.times[0]);
+    let tempTime = tempDate.format('h:mm A');
 
-    setDisplayTime(time);
+    setDisplayTime(tempTime);
     setDate(new Date(result.food.times[0]));
+  };
+
+  const onPressDone = async () => {
+    setShow(false);
+    setDonePressed(true);
   };
 
   const handleUpdateSchedule = async () => {
@@ -184,7 +193,7 @@ const Settings = () => {
 
                       <TouchableHighlight
                         underlayColor={'transparent'}
-                        onPress={() => setShow(false)}
+                        onPress={onPressDone}
                         style={[settingsStyles.btnText, settingsStyles.btnDone]}
                       >
                         <Text>Done</Text>

@@ -1,5 +1,4 @@
-import { AuthErrorCodes } from 'firebase/auth';
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 const settingsStyles = StyleSheet.create({
   container: {
