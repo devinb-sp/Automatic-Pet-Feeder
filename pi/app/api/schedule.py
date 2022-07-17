@@ -19,7 +19,7 @@ class ScheduleHelper:
         print('Scheduling the water level check')
         self.__scheduler.add_job(self.__arduino.read_water_distance,
                                  'interval',
-                                 seconds=5,
+                                 seconds=10,
                                  id='water_level',
                                  replace_existing=True)
 
@@ -28,7 +28,7 @@ class ScheduleHelper:
         print('Scheduling the food level check')
         self.__scheduler.add_job(self.__arduino.read_food_distance,
                                  'interval',
-                                 seconds=6,
+                                 seconds=10,
                                  id='food_level',
                                  replace_existing=True)
 
