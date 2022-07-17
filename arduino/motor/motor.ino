@@ -29,10 +29,13 @@
 // Distance sensors
 #define WATER_TRIG_PIN 13
 #define WATER_ECHO_PIN 12
+#define FOOD_TRIG_PIN 11
+#define FOOD_ECHO_PIN 10
 
 void controlDcComponent(int pin, int value, int in1Pin, int in1Value, int in2Pin, int in2Value);
 void setupDcComponent(int pin, int in1, int in2);
 void readForceSensor(int pin, void (*startFunc)(), void (*stopFunc)());
+void readDistanceSensor(int echoPin, int trigPin);
 
 int waterSensor = 0;
 bool flag = true;
@@ -42,6 +45,7 @@ void setup() {
   setUpMotor();
   setUpPump();
   setupWaterDistanceSensor();
+  setupFoodDistanceSensor();
 }
 
 void loop() {
@@ -79,6 +83,9 @@ void loop() {
         break;
       case READ_WATER_DISTANCE_ACTION:
         readWaterDistanceSensor();
+        break;
+      case READ_FOOD_DISTANCE_ACTION:
+        readFoodDistanceSensor();
         break;
       default:
         break;
@@ -119,25 +126,6 @@ void stopPumpAction()
 void dispenseFoodAction()
 {
   while (Serial.available() <= 0);
-//  static size_t pos;
-//  static char buffer[32];
-//  if (Serial.available())
-//  {
-//    char c = Serial.read();
-//    if (c == '\n')
-//    {
-//      buffer[pos] = '\0';
-//      float amount = atof(buffer);
-//      startMotorAction();
-//      delay((int)(amount * MILLIS_FOR_CUP));
-//      stopMotorAction();
-//    }
-//    else if (pos < sizeof buffer - 1)
-//    {
-//      buffer[pos++] = c;
-//    }
-//  }
-  
   float amount = Serial.parseFloat();
   startMotorAction();
   delay((int)(amount * MILLIS_FOR_CUP));
@@ -153,14 +141,24 @@ void controlDcComponent(int pin, int value, int in1Pin, int in1Value, int in2Pin
 
 void readWaterDistanceSensor()
 {
-  digitalWrite(WATER_TRIG_PIN, LOW);
+  readDistanceSensor(WATER_ECHO_PIN, WATER_TRIG_PIN);
+}
+
+void readFoodDistanceSensor()
+{
+  readDistanceSensor(FOOD_ECHO_PIN, FOOD_TRIG_PIN);
+}
+
+void readDistanceSensor(int echoPin, int trigPin)
+{
+  digitalWrite(trigPin, LOW);
   delayMicroseconds(2);
 
-  digitalWrite(WATER_TRIG_PIN, HIGH);
+  digitalWrite(trigPin, HIGH);
   delayMicroseconds(10);
-  digitalWrite(WATER_TRIG_PIN, LOW);
+  digitalWrite(trigPin, LOW);
 
-  long duration = pulseIn(WATER_ECHO_PIN, HIGH);
+  long duration = pulseIn(echoPin, HIGH);
   int distance = duration * 0.034 / 2;
 
   Serial.println(distance);
@@ -176,6 +174,11 @@ void setupDcComponent(int pin, int in1, int in2)
 void setupWaterDistanceSensor()
 {
   setupDistanceSensor(WATER_ECHO_PIN, WATER_TRIG_PIN);
+}
+
+void setupFoodDistanceSensor()
+{
+  setupDistanceSensor(FOOD_ECHO_PIN, FOOD_TRIG_PIN);
 }
 
 void setupDistanceSensor(int echoPin, int trigPin)
