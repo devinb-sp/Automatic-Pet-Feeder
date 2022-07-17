@@ -19,14 +19,18 @@ class ScheduleHelper:
         print('Scheduling the water level check')
         self.__scheduler.add_job(self.__arduino.read_water_distance,
                                  'interval',
-                                 seconds=5)
+                                 seconds=5,
+                                 id='water_level',
+                                 replace_existing=True)
 
     def schedule_food_level_check(self):
         '''Schedules the food level check'''
         print('Scheduling the food level check')
         self.__scheduler.add_job(self.__arduino.read_food_distance,
                                  'interval',
-                                 seconds=6)
+                                 seconds=6,
+                                 id='food_level',
+                                 replace_existing=True)
 
     def get_schedule_api(self):
         '''Returns current schedule'''
