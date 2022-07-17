@@ -9,12 +9,12 @@ PORT = '/dev/ttyUSB0'
 BAUD_RATE = 9600
 ENCODING = 'utf-8'
 
+last_water_notification_sent_time = None
+last_food_notification_sent_time = None
+
 
 class Arduino:
     '''Class representing the Arduino and all its basic functions'''
-
-    last_water_notification_sent_time = None
-    last_food_notification_sent_time = None
 
     actions = {
         'stop_motor': 0,
@@ -66,7 +66,7 @@ class Arduino:
     def read_water_distance(self):
         '''Reads the distance from the top of the container to the water'''
         return self.read_distance_sensor(self.actions['read_water_distance'],
-                                         self.last_water_notification_sent_time,
+                                         last_water_notification_sent_time,
                                          'Water level low',
                                          'The level of the water in the container is low. '
                                          'Please refill to avoid interruptions')
@@ -74,7 +74,7 @@ class Arduino:
     def read_food_distance(self):
         '''Reads the distance from the top of the container to the food'''
         return self.read_distance_sensor(self.actions['read_food_distance'],
-                                         self.last_food_notification_sent_time,
+                                         last_food_notification_sent_time,
                                          'Food level low',
                                          'The level of the food in the container is low. '
                                          'Please refill to avoid interruptions')
@@ -88,8 +88,9 @@ class Arduino:
         if int(value) < 10:
             if last_notification_time is None:
                 last_notification_time = datetime.now()
-                self.firebase_helper.send_notification_message(
-                    'token', {'title': notification_title, 'body': notification_body})
+                print('Should senf notification here')
+                # self.firebase_helper.send_notification_message(
+                #    'token', {'title': notification_title, 'body': notification_body})
             else:
                 print('Notification was sent, not doing anything now')
         else:
