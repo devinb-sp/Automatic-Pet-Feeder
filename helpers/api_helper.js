@@ -36,11 +36,11 @@ export class ApiHelper {
   }
 
   async getWaterLevel() {
-    return await getLevel(this.getWaterDistanceEndpoint, 4, 24, 100, 0);
+    return await getLevel(this.getWaterDistanceEndpoint, 4, 23, 100, 0);
   }
 
   async getFoodLevel() {
-    return await getLevel(this.getFoodDistanceEndpoint, 4, 24, 100, 0);
+    return await getLevel(this.getFoodDistanceEndpoint, 4, 10, 100, 0);
   }
 
   async getLevel(endpoint, inMax, inMin, outMax, outMin) {
