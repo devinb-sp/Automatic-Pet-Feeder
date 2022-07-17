@@ -15,7 +15,7 @@ firebase_helper = FirebaseHelper()
 arduino = Arduino(firebase_helper)
 scheduler_helper = ScheduleHelper(arduino, background_scheduler)
 scheduler_helper.schedule_water_level_check()
-## scheduler_helper.schedule_food_level_check()
+scheduler_helper.schedule_food_level_check()
 
 
 @app.route('/api/schedule', methods=['GET'])

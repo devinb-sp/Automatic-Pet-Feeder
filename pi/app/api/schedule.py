@@ -26,7 +26,7 @@ class ScheduleHelper:
         print('Scheduling the food level check')
         self.__scheduler.add_job(self.__arduino.read_food_distance,
                                  'interval',
-                                 seconds=5)
+                                 seconds=6)
 
     def get_schedule_api(self):
         '''Returns current schedule'''
