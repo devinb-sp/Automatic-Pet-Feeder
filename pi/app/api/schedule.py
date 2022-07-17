@@ -16,7 +16,7 @@ class ScheduleHelper:
 
     def schedule_level_check(self):
         '''Schedules the water level check'''
-        print('Scheduling the water level check')
+        print('Scheduling the containers level check')
         self.__scheduler.add_job(self.__arduino.read_sensor_distances,
                                  'interval',
                                  minutes=1)
