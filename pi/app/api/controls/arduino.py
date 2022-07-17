@@ -9,12 +9,11 @@ PORT = '/dev/ttyUSB0'
 BAUD_RATE = 9600
 ENCODING = 'utf-8'
 
-last_water_notification_sent_time = None
-last_food_notification_sent_time = None
-
 
 class Arduino:
     '''Class representing the Arduino and all its basic functions'''
+    last_water_notification_sent_time = None
+    last_food_notification_sent_time = None
 
     actions = {
         'stop_motor': 0,
@@ -65,35 +64,36 @@ class Arduino:
 
     def read_water_distance(self):
         '''Reads the distance from the top of the container to the water'''
-        return self.read_distance_sensor(self.actions['read_water_distance'],
-                                         last_water_notification_sent_time,
-                                         'Water level low',
-                                         'The level of the water in the container is low. '
-                                         'Please refill to avoid interruptions')
-
-    def read_food_distance(self):
-        '''Reads the distance from the top of the container to the food'''
-        return self.read_distance_sensor(self.actions['read_food_distance'],
-                                         last_food_notification_sent_time,
-                                         'Food level low',
-                                         'The level of the food in the container is low. '
-                                         'Please refill to avoid interruptions')
-
-    def read_distance_sensor(self, action, last_notification_time,
-                             notification_title, notification_body):
-        '''Reads the distance from the top of the container to contents'''
-        self.__perform_action(action)
+        self.__perform_action(self.actions['read_food_distance'])
         sleep(0.5)
         value = self.arduino.readline().decode(ENCODING).rstrip()
-        if int(value) < 10:
-            if last_notification_time is None:
-                last_notification_time = datetime.now()
-                print('Should senf notification here')
+        if int(value) <= 23:
+            if self.last_water_notification_sent_time is None:
+                self.last_water_notification_sent_time = datetime.now()
+                print('Should send water notification here')
                 # self.firebase_helper.send_notification_message(
                 #    'token', {'title': notification_title, 'body': notification_body})
             else:
-                print('Notification was sent, not doing anything now')
+                print('Water notification was sent, not doing anything now')
         else:
-            last_notification_time = None
-            print('Reset last notification sent to null')
+            self.last_water_notification_sent_time = None
+            print('Reset last notification sent to None')
+        return value
+
+    def read_food_distance(self):
+        '''Reads the distance from the top of the container to the food'''
+        self.__perform_action(self.actions['read_food_distance'])
+        sleep(0.5)
+        value = self.arduino.readline().decode(ENCODING).rstrip()
+        if int(value) <= 10:
+            if self.last_food_notification_sent_time is None:
+                self.last_food_notification_sent_time = datetime.now()
+                print('Should send food notification here')
+                # self.firebase_helper.send_notification_message(
+                #    'token', {'title': notification_title, 'body': notification_body})
+            else:
+                print('Food notification was sent, not doing anything now')
+        else:
+            self.last_food_notification_sent_time = None
+            print('Reset last notification sent to None')
         return value
