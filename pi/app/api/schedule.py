@@ -19,7 +19,7 @@ class ScheduleHelper:
         print('Scheduling the water level check')
         self.__scheduler.add_job(self.__arduino.read_sensor_distances,
                                  'interval',
-                                 seconds=10)
+                                 minutes=1)
 
     def get_schedule_api(self):
         '''Returns current schedule'''
