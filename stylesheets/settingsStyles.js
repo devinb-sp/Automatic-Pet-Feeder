@@ -15,6 +15,28 @@ const settingsStyles = StyleSheet.create({
   fieldsContainer: {
     width: '90%',
   },
+  heading1: {
+    fontFamily: 'RobotoBlack',
+    fontSize: 20,
+    width: '90%',
+    marginBottom: 20,
+    marginLeft: '5%',
+  },
+  heading2: {
+    fontFamily: 'RobotoBold',
+    fontSize: 18,
+    width: '90%',
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  borderBottom: {
+    borderBottomWidth: 1,
+    borderBottomColor: 'black',
+    width: '90%',
+    marginBottom: 20,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
   label: {
     fontFamily: 'RobotoRegular',
     fontSize: 16,
@@ -82,6 +104,7 @@ const settingsStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
+    marginBottom: 20,
   },
 });
 

@@ -54,6 +54,7 @@ const AmountsDropDown = ({ handleAmountChange, index, zIndex }) => {
       setOpen={setOpen}
       setValue={setValues}
       setItems={setItems}
+      listMode="SCROLLVIEW"
     />
   );
 };
