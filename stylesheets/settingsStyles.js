@@ -68,7 +68,7 @@ const settingsStyles = StyleSheet.create({
     marginBottom: 10,
     borderRadius: 0,
   },
-  buttons: {
+  button: {
     backgroundColor: '#5363B6',
     paddingVertical: 12,
     width: '100%',
@@ -77,11 +77,12 @@ const settingsStyles = StyleSheet.create({
     borderRadius: 5,
     borderColor: 'rgba(0, 0, 0, 0.3)',
     borderWidth: 1,
+    marginTop: 10,
     marginBottom: 10,
     marginRight: '5%',
     marginLeft: '5%',
   },
-  buttonsText: {
+  buttonText: {
     fontFamily: 'RobotoRegular',
     color: 'white',
   },

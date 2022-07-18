@@ -6,7 +6,7 @@ import settingsStyles from '../stylesheets/settingsStyles';
 
 const apiHelper = new ApiHelper();
 
-const AmountsDropDown = ({ handleAmountChange, index, zIndex }) => {
+const AmountsDropDown = ({ handleAmountChange, index }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -23,8 +23,7 @@ const AmountsDropDown = ({ handleAmountChange, index, zIndex }) => {
     const result = await apiHelper.getFoodSchedule();
 
     if (result.food.amounts[index]) {
-      setValue(result.food.amounts[index].toString());
-      handleAmountChange(result.food.amounts[index].toString());
+      setValues(result.food.amounts[index].toString());
     }
   };
 

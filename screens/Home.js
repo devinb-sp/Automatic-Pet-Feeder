@@ -6,7 +6,7 @@ import { ApiHelper } from '../helpers/api_helper';
 import * as Progress from 'react-native-progress';
 const apiHelper = new ApiHelper();
 
-const Home = () => {
+const Home = ({ tabClicked }) => {
   const [waterLevelPercentage, setWaterLevelPercentage] = useState(0.0);
   const [foodLevelPercentage, setFoodLevelPercentage] = useState(0.0);
 
@@ -33,6 +33,12 @@ const Home = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (!apiHelper.isGettingLevels) {
+      updateContainerLevels();
+    }
+  }, [tabClicked]);
+
   return (
     <View style={{ flex: 1, alignItems: 'center', margin: 20 }}>
       <Text style={{ fontSize: 20, marginTop: 20, marginBottom: 10 }}>Water Level</Text>
@@ -53,9 +59,6 @@ const Home = () => {
         color={homeStyles.progressBar.color}
       />
       <Text style={{ fontSize: 16, marginBottom: 20, marginTop: 10 }}>{foodLevelPercentage}%</Text>
-      <TouchableOpacity onPress={updateContainerLevels} style={homeStyles.button}>
-        <Text style={homeStyles.buttonText}>Check Levels</Text>
-      </TouchableOpacity>
     </View>
   );
 };

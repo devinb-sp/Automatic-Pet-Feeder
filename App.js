@@ -17,6 +17,7 @@ const apiHelper = new ApiHelper();
 
 const AfterLogin = () => {
   const [isStopped, setIsStopped] = useState(true);
+  const [tabClicked, setTabClicked] = useState(false);
 
   return (
     <Tab.Navigator
@@ -41,15 +42,16 @@ const AfterLogin = () => {
     >
       <Tab.Screen
         name="Home"
-        component={Home}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
             if (isStopped == false) {
               setIsStopped(true);
               apiHelper.stopCameraFeed();
             }
+            setTabClicked(!tabClicked);
           },
         })}
+        children={() => <Home tabClicked={tabClicked} />}
       />
       <Tab.Screen
         name="Camera"

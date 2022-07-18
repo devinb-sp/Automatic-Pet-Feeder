@@ -220,8 +220,8 @@ const Settings = () => {
         ) : null}
 
         <View style={settingsStyles.fieldsContainer}>
-          <TouchableOpacity onPress={handleUpdateSchedule} style={settingsStyles.buttons}>
-            <Text style={settingsStyles.buttonsText}>Save Schedule</Text>
+          <TouchableOpacity onPress={handleUpdateSchedule} style={settingsStyles.button}>
+            <Text style={settingsStyles.buttonText}>Save Schedule</Text>
           </TouchableOpacity>
         </View>
 
