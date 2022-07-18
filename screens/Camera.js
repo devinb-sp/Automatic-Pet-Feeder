@@ -1,9 +1,6 @@
 import * as React from 'react';
-import { View, Text, Linking, TouchableOpacity, Alert } from 'react-native';
+import { View } from 'react-native';
 import { WebView } from 'react-native-webview';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
-import settingsStyles from '../stylesheets/settingsStyles';
-import { ApiHelper } from '../helpers/api_helper';
 import cameraStyles from '../stylesheets/cameraStyles';
 
 const Camera = () => {
