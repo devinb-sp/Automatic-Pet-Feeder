@@ -25,7 +25,6 @@ const Home = () => {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', margin: 20 }}>
-      <Text style={{ fontFamily: 'RobotoBlack', fontSize: 50 }}>Home</Text>
       <Text style={{ fontSize: 20, marginTop: 60 }}>Water Level</Text>
       <Progress.Bar
         progress={waterLevelPercentage / 100}
