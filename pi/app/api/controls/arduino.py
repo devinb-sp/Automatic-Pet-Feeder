@@ -68,6 +68,7 @@ class Arduino:
         self.__perform_action(self.actions['read_food_distance'])
         sleep(0.5)
         value = self.arduino.readline().decode(ENCODING).rstrip()
+        print('JOSE: Water type is ', type(value), value)
         if int(value) <= 23:
             if self.last_water_notification_sent_time is None:
                 self.last_water_notification_sent_time = datetime.now()
