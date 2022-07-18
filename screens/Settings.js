@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, TouchableHighlight, Modal } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
@@ -57,22 +57,63 @@ const Settings = () => {
     setTime3(time);
   };
 
+  useEffect(() => {
+    checkAPI();
+  }, []);
+
+  const checkAPI = async () => {
+    const result = await apiHelper.getFoodSchedule();
+
+    if (result.food.times.length === 1) {
+      setValue('one');
+    } else if (result.food.times.length === 2) {
+      setValue('two');
+    } else if (result.food.times.length === 3) {
+      setValue('three');
+    } else {
+      setValue(null);
+    }
+  };
+
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState('one');
+  const [value, setValue] = useState(null);
   const [items, setItems] = useState([
     { label: 'Once a day', value: 'one' },
     { label: 'Twice a day', value: 'two' },
     { label: 'Three times a day', value: 'three' },
   ]);
 
-  // NOTE: FINISH THIS FUNCTION => NEED TO ACCOUNT FOR TWICE AND THREE TIMES A DAY
   const handleUpdateSchedule = async () => {
-    const times = [];
-    const amounts = [];
+    let times = [];
+    let amounts = [];
 
     if (value === 'one') {
-      times[0] = time1;
-      amounts[0] = parseFloat(value1);
+      if (time1 === null || value1 === null) {
+        console.log('ERROR1');
+        return;
+      } else {
+        times = [time1];
+        amounts = [parseFloat(value1)];
+      }
+    } else if (value === 'two') {
+      if (time1 === null || value1 === null || time2 === null || value2 === null) {
+        console.log('ERROR2');
+        return;
+      } else {
+        times = [time1, time2];
+        amounts = [parseFloat(value1), parseFloat(value2)];
+      }
+    } else if (value === 'three') {
+      if (time1 === null || value1 === null || time2 === null || value2 === null || time3 === null || value3 === null) {
+        console.log('ERROR3');
+        return;
+      } else {
+        times = [time1, time2, time3];
+        amounts = [parseFloat(value1), parseFloat(value2), parseFloat(value3)];
+      }
+    } else {
+      console.log('***ERROR: ARRAYS NOT PROPERLY SET***');
+      return;
     }
 
     apiHelper.updateFoodSchedule(amounts, times);

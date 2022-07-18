@@ -19,15 +19,17 @@ const TimeSelect = ({ handleTimeChange, index }) => {
   }, []);
 
   const showDateTime = async () => {
+    const result = await apiHelper.getFoodSchedule();
     setShow(!show);
 
-    if (!donePressed) {
-      const result = await apiHelper.getFoodSchedule();
-      var tempDate = moment(result.food.times[index]);
-      let tempTime = tempDate.format('h:mm A');
+    if (result.food.times[index]) {
+      if (!donePressed) {
+        var tempDate = moment(result.food.times[index]);
+        let tempTime = tempDate.format('h:mm A');
 
-      setDisplayTime(tempTime);
-      setDate(new Date(result.food.times[index]));
+        setDisplayTime(tempTime);
+        setDate(new Date(result.food.times[index]));
+      }
     }
   };
 
@@ -53,11 +55,14 @@ const TimeSelect = ({ handleTimeChange, index }) => {
 
   const changeDisplayTime = async () => {
     const result = await apiHelper.getFoodSchedule();
-    console.log(result.food.times);
-    var tempDate = moment(result.food.times[index]);
-    let tempTime = tempDate.format('h:mm A');
 
-    setDisplayTime(tempTime);
+    if (result.food.times[index]) {
+      var tempDate = moment(result.food.times[index]);
+      let tempTime = tempDate.format('h:mm A');
+
+      setDisplayTime(tempTime);
+      handleTimeChange(result.food.times[index]);
+    }
   };
 
   const onPressCancel = async () => {
@@ -78,7 +83,13 @@ const TimeSelect = ({ handleTimeChange, index }) => {
     <View>
       <TouchableHighlight underlayColor={'transparent'} activeOpacity={0} onPress={() => showDateTime()}>
         <View>
-          <Text style={settingsStyles.fields}>{displayTime}</Text>
+          {/* <Text style={settingsStyles.fields}> */}
+          {displayTime.length === 0 ? (
+            <Text style={settingsStyles.fields}>Select a time</Text>
+          ) : (
+            <Text style={settingsStyles.fields}>{displayTime}</Text>
+          )}
+          {/* </Text> */}
           <Modal
             transparent={true}
             animationType="slide"

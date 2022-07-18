@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, TouchableHighlight, Modal } from 'react-native';
-import { signOut } from 'firebase/auth';
-import { auth } from '../firebase';
-import { useNavigation } from '@react-navigation/native';
 import { ApiHelper } from '../helpers/api_helper';
 ('../helpers/api_helper');
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -12,7 +8,7 @@ const apiHelper = new ApiHelper();
 
 const AmountsDropDown = ({ handleAmountChange, index, zIndex }) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState('0.25');
+  const [value, setValue] = useState(null);
   const [items, setItems] = useState([
     { label: '1/4 Cup', value: '0.25' },
     { label: '1/2 Cup', value: '0.5' },
@@ -26,9 +22,10 @@ const AmountsDropDown = ({ handleAmountChange, index, zIndex }) => {
   const changeDisplayAmount = async () => {
     const result = await apiHelper.getFoodSchedule();
 
-    console.log(index);
-
-    setValue(result.food.amounts[index].toString());
+    if (result.food.amounts[index]) {
+      setValue(result.food.amounts[index].toString());
+      handleAmountChange(result.food.amounts[index].toString());
+    }
   };
 
   const setValues = (amount) => {
