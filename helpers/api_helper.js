@@ -36,17 +36,21 @@ export class ApiHelper {
   }
 
   async getLevel(endpoint, inMax, inMin, outMax, outMin) {
-    distance = (await this.sendGetRequest(endpoint))['distance'];
+    try {
+      distance = (await this.sendGetRequest(endpoint))['distance'];
 
-    if (distance < inMin) {
-      distance = inMin;
+      if (distance < inMin) {
+        distance = inMin;
+      }
+
+      if (distance > inMax) {
+        distance = inMax;
+      }
+
+      return ((distance - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+    } catch (error) {
+      return 0;
     }
-
-    if (distance > inMax) {
-      distance = inMax;
-    }
-
-    return ((distance - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
   }
 
   async getWaterLevel() {
