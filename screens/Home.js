@@ -11,16 +11,26 @@ const Home = () => {
   const [foodLevelPercentage, setFoodLevelPercentage] = useState(0.0);
 
   const updateContainerLevels = async () => {
+    apiHelper.isGettingLevels = true;
     const waterLevel = await apiHelper.getWaterLevel();
     const foodLevel = await apiHelper.getFoodLevel();
     console.log(`JOSE: Water level ${waterLevel}`);
     console.log(`JOSE: Food level ${foodLevel}`);
-    setWaterLevelPercentage(waterLevel);
-    setFoodLevelPercentage(foodLevel);
+    if (waterLevel) {
+      setWaterLevelPercentage(waterLevel);
+    }
+
+    if (foodLevel) {
+      setFoodLevelPercentage(foodLevel);
+    }
+
+    apiHelper.isGettingLevels = false;
   };
 
   useEffect(() => {
-    updateContainerLevels();
+    if (!apiHelper.isGettingLevels) {
+      updateContainerLevels();
+    }
   }, []);
 
   return (

@@ -11,6 +11,7 @@ export class ApiHelper {
   getWaterDistanceEndpoint = 'get-water-distance';
   getFoodDistanceEndpoint = 'get-food-distance';
   canReadLevelsEndpoint = 'can-read-levels';
+  isGettingLevels = false;
 
   startMotor() {
     this.controlMotor('start');
