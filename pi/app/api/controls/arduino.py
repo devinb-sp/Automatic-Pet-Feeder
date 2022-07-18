@@ -65,7 +65,7 @@ class Arduino:
 
     def read_water_distance(self):
         '''Reads the distance from the top of the container to the water'''
-        self.__perform_action(self.actions['read_food_distance'])
+        self.__perform_action(self.actions['read_water_distance'])
         sleep(0.5)
         value = self.arduino.readline().decode(ENCODING).rstrip()
         print('JOSE: Water type is ', type(value), value)
