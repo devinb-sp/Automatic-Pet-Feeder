@@ -78,6 +78,7 @@ const homeStyles = StyleSheet.create({
   },
   progressBar: {
     color: '#5363B6',
+    borderColor: 'rgba(0, 0, 0, 0.3)',
   },
 });
 

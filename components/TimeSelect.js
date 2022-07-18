@@ -85,9 +85,9 @@ const TimeSelect = ({ handleTimeChange, index }) => {
         <View>
           {/* <Text style={settingsStyles.fields}> */}
           {displayTime.length === 0 ? (
-            <Text style={settingsStyles.fields}>Select a time</Text>
+            <Text style={settingsStyles.field}>Select a time</Text>
           ) : (
-            <Text style={settingsStyles.fields}>{displayTime}</Text>
+            <Text style={settingsStyles.field}>{displayTime}</Text>
           )}
           {/* </Text> */}
           <Modal

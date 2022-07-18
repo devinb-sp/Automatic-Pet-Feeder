@@ -15,7 +15,14 @@ const settingsStyles = StyleSheet.create({
   fieldsContainer: {
     width: '90%',
   },
-  fields: {
+  label: {
+    fontFamily: 'RobotoRegular',
+    fontSize: 16,
+    width: '90%',
+    marginBottom: 10,
+    marginLeft: '5%',
+  },
+  field: {
     backgroundColor: 'white',
     paddingVertical: 15,
     paddingHorizontal: 10,
@@ -26,7 +33,7 @@ const settingsStyles = StyleSheet.create({
     marginRight: '5%',
     marginLeft: '5%',
   },
-  dropdowns: {
+  dropdown: {
     backgroundColor: 'white',
     paddingVertical: 15,
     paddingHorizontal: 10,
@@ -37,6 +44,7 @@ const settingsStyles = StyleSheet.create({
     marginRight: 'auto',
     marginLeft: 'auto',
     marginBottom: 10,
+    borderRadius: 0,
   },
   buttons: {
     backgroundColor: '#5363B6',

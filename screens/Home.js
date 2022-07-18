@@ -34,27 +34,27 @@ const Home = () => {
   }, []);
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', margin: 20 }}>
-      <Text style={{ fontSize: 20, marginTop: 60 }}>Water Level</Text>
+    <View style={{ flex: 1, alignItems: 'center', margin: 20 }}>
+      <Text style={{ fontSize: 20, marginTop: 20, marginBottom: 10 }}>Water Level</Text>
       <Progress.Bar
         progress={waterLevelPercentage / 100}
-        width={300}
-        height={20}
+        width={350}
+        height={25}
         style={homeStyles.progressBar}
         color={homeStyles.progressBar.color}
       />
-      <Text style={{ fontSize: 16 }}>{waterLevelPercentage}%</Text>
-      <Text style={{ fontSize: 20, marginTop: 20 }}>Food Level</Text>
+      <Text style={{ fontSize: 16, marginTop: 10 }}>{waterLevelPercentage}%</Text>
+      <Text style={{ fontSize: 20, marginTop: 20, marginBottom: 10 }}>Food Level</Text>
       <Progress.Bar
         progress={foodLevelPercentage / 100}
-        width={300}
-        height={20}
+        width={350}
+        height={25}
         style={homeStyles.progressBar}
         color={homeStyles.progressBar.color}
       />
-      <Text style={{ fontSize: 16, marginBottom: 60 }}>{foodLevelPercentage}%</Text>
+      <Text style={{ fontSize: 16, marginBottom: 20, marginTop: 10 }}>{foodLevelPercentage}%</Text>
       <TouchableOpacity onPress={updateContainerLevels} style={homeStyles.button}>
-        <Text style={homeStyles.buttonText}>Refresh</Text>
+        <Text style={homeStyles.buttonText}>Check Levels</Text>
       </TouchableOpacity>
     </View>
   );

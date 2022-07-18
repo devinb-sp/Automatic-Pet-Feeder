@@ -35,7 +35,7 @@ const AmountsDropDown = ({ handleAmountChange, index, zIndex }) => {
 
   return (
     <DropDownPicker
-      style={settingsStyles.dropdowns}
+      style={settingsStyles.dropdown}
       dropDownContainerStyle={{
         paddingVertical: 15,
         paddingHorizontal: 10,

@@ -124,7 +124,7 @@ const Settings = () => {
       <Text style={{ fontFamily: 'RobotoBlack', fontSize: 20, width: '90%', marginBottom: 20, marginLeft: '5%' }}>
         Food Schedule
       </Text>
-
+      <Text style={settingsStyles.label}>Frequency</Text>
       <View style={{ zIndex: 1000 }}>
         <DropDownPicker
           open={open}
@@ -133,7 +133,7 @@ const Settings = () => {
           setOpen={setOpen}
           setValue={setValue}
           setItems={setItems}
-          style={settingsStyles.dropdowns}
+          style={settingsStyles.dropdown}
           dropDownContainerStyle={{
             paddingVertical: 15,
             paddingHorizontal: 10,
@@ -150,9 +150,12 @@ const Settings = () => {
 
       {value === 'one' ? (
         <>
+          <Text style={settingsStyles.label}>Serving Size</Text>
           <View style={{ zIndex: 900 }}>
             <AmountsDropDown handleAmountChange={handleAmountChange1} index={0} />
           </View>
+
+          <Text style={settingsStyles.label}>Time</Text>
           <TimeSelect handleTimeChange={handleTimeChange1} index={0} />
         </>
       ) : value === 'two' ? (
