@@ -35,16 +35,8 @@ export class ApiHelper {
     return this.sendGetRequest(this.scheduleEndpoint, null);
   }
 
-  async getWaterLevel() {
-    return await getLevel(this.getWaterDistanceEndpoint, 4, 23, 100, 0);
-  }
-
-  async getFoodLevel() {
-    return await getLevel(this.getFoodDistanceEndpoint, 4, 10, 100, 0);
-  }
-
   async getLevel(endpoint, inMax, inMin, outMax, outMin) {
-    distance = await this.sendGetRequest(endpoint)['distance'];
+    distance = (await this.sendGetRequest(endpoint))['distance'];
 
     if (distance < inMin) {
       distance = inMin;
@@ -55,6 +47,14 @@ export class ApiHelper {
     }
 
     return ((distance - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+  }
+
+  async getWaterLevel() {
+    return await this.getLevel(this.getWaterDistanceEndpoint, 4, 23, 100, 0);
+  }
+
+  async getFoodLevel() {
+    return await this.getLevel(this.getFoodDistanceEndpoint, 4, 10, 100, 0);
   }
 
   // [amounts] must be an array of float

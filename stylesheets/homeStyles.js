@@ -76,6 +76,9 @@ const homeStyles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 16,
   },
+  progressBar: {
+    color: '#5363B6',
+  },
 });
 
 export default homeStyles;
