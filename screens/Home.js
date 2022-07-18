@@ -14,8 +14,8 @@ const Home = ({ tabClicked }) => {
     apiHelper.isGettingLevels = true;
     const waterLevel = await apiHelper.getWaterLevel();
     const foodLevel = await apiHelper.getFoodLevel();
-    console.log(`JOSE: Water level ${waterLevel}`);
-    console.log(`JOSE: Food level ${foodLevel}`);
+    console.log(`Water level ${waterLevel}`);
+    console.log(`Food level ${foodLevel}`);
     if (waterLevel) {
       setWaterLevelPercentage(waterLevel);
     }
@@ -39,26 +39,45 @@ const Home = ({ tabClicked }) => {
     }
   }, [tabClicked]);
 
+  const SECONDS_MS = 10000;
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      updateContainerLevels();
+    }, SECONDS_MS);
+
+    return () => clearInterval(interval); // This represents the unmount function, in which you need to clear your interval to prevent memory leaks.
+  }, []);
+
   return (
-    <View style={{ flex: 1, alignItems: 'center', margin: 20 }}>
-      <Text style={{ fontSize: 20, marginTop: 20, marginBottom: 10 }}>Water Level</Text>
-      <Progress.Bar
+    <View style={homeStyles.container}>
+      <Text style={homeStyles.label}>Water Level</Text>
+      <Progress.Circle
+        showsText={true}
         progress={waterLevelPercentage / 100}
-        width={350}
-        height={25}
+        thickness={15}
+        size={200}
         style={homeStyles.progressBar}
         color={homeStyles.progressBar.color}
+        unfilledColor={homeStyles.progressBar.unfilledColor}
+        strokeCap={'round'}
+        direction={'counter-clockwise'}
+        borderWidth={0}
       />
-      <Text style={{ fontSize: 16, marginTop: 10 }}>{waterLevelPercentage}%</Text>
-      <Text style={{ fontSize: 20, marginTop: 20, marginBottom: 10 }}>Food Level</Text>
-      <Progress.Bar
+      <View style={homeStyles.borderBottom}></View>
+      <Text style={homeStyles.label}>Food Level</Text>
+      <Progress.Circle
+        showsText={true}
         progress={foodLevelPercentage / 100}
-        width={350}
-        height={25}
+        thickness={15}
+        size={200}
         style={homeStyles.progressBar}
         color={homeStyles.progressBar.color}
+        unfilledColor={homeStyles.progressBar.unfilledColor}
+        strokeCap={'round'}
+        direction={'counter-clockwise'}
+        borderWidth={0}
       />
-      <Text style={{ fontSize: 16, marginBottom: 20, marginTop: 10 }}>{foodLevelPercentage}%</Text>
     </View>
   );
 };

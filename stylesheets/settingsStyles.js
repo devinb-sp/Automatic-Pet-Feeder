@@ -105,7 +105,7 @@ const settingsStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 50,
   },
 });
 
