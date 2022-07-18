@@ -39,15 +39,15 @@ export class ApiHelper {
     try {
       distance = (await this.sendGetRequest(endpoint))['distance'];
 
-      if (distance < inMin) {
+      if (distance > inMin) {
         distance = inMin;
       }
 
-      if (distance > inMax) {
+      if (distance < inMax) {
         distance = inMax;
       }
 
-      return ((distance - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+      return Math.round(((distance - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin);
     } catch (error) {
       return 0;
     }
@@ -58,7 +58,7 @@ export class ApiHelper {
   }
 
   async getFoodLevel() {
-    return await this.getLevel(this.getFoodDistanceEndpoint, 4, 10, 100, 0);
+    return await this.getLevel(this.getFoodDistanceEndpoint, 5, 10, 100, 0);
   }
 
   // [amounts] must be an array of float

@@ -14,6 +14,7 @@ class Arduino:
     '''Class representing the Arduino and all its basic functions'''
     last_water_notification_sent_time = None
     last_food_notification_sent_time = None
+    can_read_levels = True
 
     actions = {
         'stop_motor': 0,
@@ -100,7 +101,13 @@ class Arduino:
             print('Reset last notification sent to None')
         return value
 
+    def can_read_levels_function(self):
+        '''Returns can read level value'''
+        return self.can_read_levels
+
     def read_sensor_distances(self):
         '''Reads both distance sensors'''
+        self.can_read_levels = False
         self.read_food_distance()
         self.read_water_distance()
+        self.can_read_levels = True

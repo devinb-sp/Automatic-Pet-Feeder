@@ -7,8 +7,8 @@ import * as Progress from 'react-native-progress';
 const apiHelper = new ApiHelper();
 
 const Home = () => {
-  const [waterLevelPercentage, setWaterLevelPercentage] = useState(0);
-  const [foodLevelPercentage, setFoodLevelPercentage] = useState(0);
+  const [waterLevelPercentage, setWaterLevelPercentage] = useState(0.0);
+  const [foodLevelPercentage, setFoodLevelPercentage] = useState(0.0);
 
   const updateContainerLevels = async () => {
     const waterLevel = await apiHelper.getWaterLevel();
@@ -28,7 +28,7 @@ const Home = () => {
       <Text style={{ fontFamily: 'RobotoBlack', fontSize: 50 }}>Home</Text>
       <Text style={{ fontSize: 20, marginTop: 60 }}>Water Level</Text>
       <Progress.Bar
-        progress={waterLevelPercentage}
+        progress={waterLevelPercentage / 100}
         width={300}
         height={20}
         style={homeStyles.progressBar}
@@ -37,7 +37,7 @@ const Home = () => {
       <Text style={{ fontSize: 16 }}>{waterLevelPercentage}%</Text>
       <Text style={{ fontSize: 20, marginTop: 20 }}>Food Level</Text>
       <Progress.Bar
-        progress={foodLevelPercentage}
+        progress={foodLevelPercentage / 100}
         width={300}
         height={20}
         style={homeStyles.progressBar}

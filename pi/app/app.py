@@ -141,5 +141,13 @@ def get_food_distance():
     return make_response(jsonify({'distance': distance}), 200)
 
 
+@app.route('/api/can-read-levels', methods=['GET'])
+def can_read_levels():
+    '''Determines if we can read the level'''
+    can_read = arduino.can_read_levels_function()
+
+    return make_response(jsonify(can_read), 200)
+
+
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0')
