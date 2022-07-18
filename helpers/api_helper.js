@@ -93,6 +93,7 @@ export class ApiHelper {
   async sendGetRequest(endpoint) {
     try {
       const response = await this.buildRequest('GET', endpoint, null);
+      if (response.status == 500) return {};
       const json = await response.json();
       return json;
     } catch (error) {
