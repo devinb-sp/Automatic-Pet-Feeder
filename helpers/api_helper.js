@@ -1,3 +1,5 @@
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
 export class ApiHelper {
   baseUrl = 'http://192.168.1.83:5000/api/';
   // baseUrl = 'http://localhost:5000/api/';
@@ -8,6 +10,7 @@ export class ApiHelper {
   stopFeedEndpoint = 'stop-feed';
   getWaterDistanceEndpoint = 'get-water-distance';
   getFoodDistanceEndpoint = 'get-food-distance';
+  canReadLevelsEndpoint = 'can-read-levels';
 
   startMotor() {
     this.controlMotor('start');
@@ -37,6 +40,12 @@ export class ApiHelper {
 
   async getLevel(endpoint, inMax, inMin, outMax, outMin) {
     try {
+      canReadLevels = await this.sendGetRequest(this.scheduleEndpoint, null);
+
+      if (!canReadLevels) {
+        await delay(5000);
+      }
+
       distance = (await this.sendGetRequest(endpoint))['distance'];
 
       if (distance > inMin) {
