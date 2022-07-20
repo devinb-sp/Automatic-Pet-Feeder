@@ -1,6 +1,7 @@
 '''Helper to read expo push token'''
 import json
 import os
+from flask import jsonify
 import requests
 
 
@@ -54,9 +55,10 @@ class ExpoTokenHelper:
         }
 
         requests.post('https://exp.host/--/api/v2/push/send',
-                      data=data,
-                      headers={
+                      data=jsonify(data),
+                      headers=jsonify({
+                          'host': 'exp.host',
                           'Accept': 'application/json',
                           'Accept-encoding': 'gzip, deflate',
                           'Content-Type': 'application/json',
-                      })
+                      }))
