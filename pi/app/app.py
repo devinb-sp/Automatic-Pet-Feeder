@@ -7,12 +7,14 @@ from api.schedule import ScheduleHelper
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, request, make_response, jsonify
 from api.controls.camera_test import initialize_camera, stop_camera_feed
+from api.helpers.expo_token_helper import ExpoTokenHelper
 
 app = Flask(__name__)
 
 background_scheduler = BackgroundScheduler(demon=True)
 firebase_helper = FirebaseHelper()
 arduino = Arduino(firebase_helper)
+expo_token_helper = ExpoTokenHelper()
 scheduler_helper = ScheduleHelper(arduino, background_scheduler)
 scheduler_helper.schedule_level_check()
 
@@ -104,13 +106,6 @@ def stop_camera():
     return make_response('', 200)
 
 
-def gen(camera):
-    while True:
-        frame = camera.get_frame()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-
-
 @app.route('/api/initialize-feed', methods=['POST'])
 def initialize_feed():
     '''Initializes camera feed'''
@@ -147,6 +142,19 @@ def can_read_levels():
     can_read = arduino.can_read_levels_function()
 
     return make_response(jsonify(can_read), 200)
+
+
+@app.route('/api/set-expo-token', methods=['POST'])
+def set_expo_token():
+    '''Sets the Expo Push Notifications token'''
+    data = request.get_json()
+
+    if not 'token' in data:
+        return make_response('Token must be provided', 400)
+
+    did_update_token = expo_token_helper.update_token(data['token'])
+
+    return make_response('', 204) if did_update_token else make_response('', 204)
 
 
 if __name__ == '__main__':

@@ -10,14 +10,20 @@ import Home from './screens/Home';
 import Camera from './screens/Camera';
 import Settings from './screens/Settings';
 import Login from './screens/Login';
+import { PushNotificationsHelper } from './helpers/push_notifications_helper';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const apiHelper = new ApiHelper();
+const pushNotificationsHelper = new PushNotificationsHelper();
 
 const AfterLogin = () => {
-  const [isStopped, setIsStopped] = useState(true);
+  const [isCameraFeedStopped, setIsCameraFeedStopped] = useState(true);
   const [tabClicked, setTabClicked] = useState(false);
+
+  useEffect(() => {
+    pushNotificationsHelper.registerForPushNotificationsAsync();
+  });
 
   return (
     <Tab.Navigator
@@ -44,8 +50,8 @@ const AfterLogin = () => {
         name="Home"
         listeners={({ navigation }) => ({
           tabPress: (e) => {
-            if (isStopped == false) {
-              setIsStopped(true);
+            if (isCameraFeedStopped == false) {
+              setIsCameraFeedStopped(true);
               apiHelper.stopCameraFeed();
             }
             setTabClicked(!tabClicked);
@@ -58,7 +64,7 @@ const AfterLogin = () => {
         component={Camera}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
-            setIsStopped(false);
+            setIsCameraFeedStopped(false);
             apiHelper.initializeCameraFeed();
           },
         })}
@@ -68,8 +74,8 @@ const AfterLogin = () => {
         component={Settings}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
-            if (isStopped == false) {
-              setIsStopped(true);
+            if (isCameraFeedStopped == false) {
+              setIsCameraFeedStopped(true);
               apiHelper.stopCameraFeed();
             }
           },
