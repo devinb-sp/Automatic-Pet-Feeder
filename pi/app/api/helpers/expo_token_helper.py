@@ -54,11 +54,14 @@ class ExpoTokenHelper:
             'body': body
         }
 
-        requests.post('https://exp.host/--/api/v2/push/send',
-                      data=jsonify(data),
-                      headers=jsonify({
-                          'host': 'exp.host',
-                          'Accept': 'application/json',
-                          'Accept-encoding': 'gzip, deflate',
-                          'Content-Type': 'application/json',
-                      }))
+        response = requests.post('https://exp.host/--/api/v2/push/send',
+                                 data=jsonify(data),
+                                 headers=jsonify({
+                                     'host': 'exp.host',
+                                     'Accept': 'application/json',
+                                     'Accept-encoding': 'gzip, deflate',
+                                     'Content-Type': 'application/json',
+                                 }))
+
+        print('JOSE: Response from expo request ',
+              response.status_code, response.text)
