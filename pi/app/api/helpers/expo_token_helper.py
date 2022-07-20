@@ -54,13 +54,13 @@ class ExpoTokenHelper:
         }
 
         response = requests.post('https://exp.host/--/api/v2/push/send',
-                                 data=json.dumps(data),
-                                 headers=json.dumps({
+                                 json=json.dumps(data),
+                                 headers={
                                      'host': 'exp.host',
                                      'Accept': 'application/json',
                                      'Accept-encoding': 'gzip, deflate',
                                      'Content-Type': 'application/json',
-                                 }))
+                                 })
 
         print('JOSE: Response from expo request ',
               response.status_code, response.text)
