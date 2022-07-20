@@ -50,7 +50,7 @@ const AfterLogin = () => {
         name="Home"
         listeners={({ navigation }) => ({
           tabPress: (e) => {
-            if (isCameraFeedStopped == false) {
+            if (!isCameraFeedStopped) {
               setIsCameraFeedStopped(true);
               apiHelper.stopCameraFeed();
             }
@@ -74,7 +74,7 @@ const AfterLogin = () => {
         component={Settings}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
-            if (isCameraFeedStopped == false) {
+            if (!isCameraFeedStopped) {
               setIsCameraFeedStopped(true);
               apiHelper.stopCameraFeed();
             }
