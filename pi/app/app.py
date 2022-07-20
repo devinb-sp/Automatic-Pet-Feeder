@@ -9,7 +9,7 @@ from api.helpers.expo_token_helper import ExpoTokenHelper
 app = Flask(__name__)
 
 background_scheduler = BackgroundScheduler(demon=True)
-expo_token_helper = ExpoTokenHelper()
+expo_token_helper = ExpoTokenHelper(None)
 arduino = Arduino(expo_token_helper)
 scheduler_helper = ScheduleHelper(arduino, background_scheduler)
 scheduler_helper.schedule_level_check()
