@@ -90,7 +90,7 @@ export class ApiHelper {
       token: token,
     };
 
-    this.sendPostRequest(this.setExpoToken, data);
+    this.sendPostRequest(this.setExpoTokenEndpoint, data);
   }
 
   // Helper methods //
