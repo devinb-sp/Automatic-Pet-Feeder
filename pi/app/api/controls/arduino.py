@@ -90,6 +90,7 @@ class Arduino:
         self.__perform_action(self.actions['read_food_distance'])
         sleep(0.5)
         value = self.arduino.readline().decode(ENCODING).rstrip()
+        print('JOSE: Food type is ', type(value), value)
         if int(value) <= 10:
             if self.last_food_notification_sent_time is None:
                 self.last_food_notification_sent_time = datetime.now()
