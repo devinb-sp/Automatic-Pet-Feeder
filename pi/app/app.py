@@ -1,20 +1,16 @@
 '''Main communications module for Automatic Pet Feeder'''
-from flask import Flask, request, make_response, jsonify, Response
+from flask import Flask, request, make_response, jsonify
 from apscheduler.schedulers.background import BackgroundScheduler
 from api.controls.arduino import Arduino
-from api.firebase.firebase_helper import FirebaseHelper
 from api.schedule import ScheduleHelper
-from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, request, make_response, jsonify
 from api.controls.camera_test import initialize_camera, stop_camera_feed
 from api.helpers.expo_token_helper import ExpoTokenHelper
 
 app = Flask(__name__)
 
 background_scheduler = BackgroundScheduler(demon=True)
-firebase_helper = FirebaseHelper()
-arduino = Arduino(firebase_helper)
 expo_token_helper = ExpoTokenHelper()
+arduino = Arduino(expo_token_helper)
 scheduler_helper = ScheduleHelper(arduino, background_scheduler)
 scheduler_helper.schedule_level_check()
 
