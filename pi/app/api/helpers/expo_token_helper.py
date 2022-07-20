@@ -9,12 +9,15 @@ class ExpoTokenHelper:
 
     TOKEN_LABEL = 'token'
     FILENAME = '../persistent_data/expo_token.json'
-    FILE_PATH = os.path.join(os.path.dirname(__file__), FILENAME)
+    filepath = os.path.join(os.path.dirname(__file__), FILENAME)
+
+    def __init__(self, filepath):
+        self.filepath = filepath if filepath is not None else self.filepath
 
     def read_token(self):
         '''Reads the data from the json file'''
         try:
-            with open(self.FILE_PATH, 'r+', encoding='utf-8') as file:
+            with open(self.filepath, 'r+', encoding='utf-8') as file:
                 data = json.load(file)
 
             if not self.TOKEN_LABEL in data:
@@ -30,9 +33,9 @@ class ExpoTokenHelper:
             if token is None:
                 return False
 
-            os.remove(self.FILE_PATH)
+            os.remove(self.filepath)
 
-            with open(self.FILE_PATH, 'w', encoding='utf-8') as file:
+            with open(self.filepath, 'w', encoding='utf-8') as file:
                 json.dump({self.TOKEN_LABEL: token}, file, indent=4)
 
             return True
@@ -42,6 +45,8 @@ class ExpoTokenHelper:
     def send_notification(self, title, body):
         '''Sends a notification to the currently saved token'''
         token = self.read_token()
+
+        print('JOSE: The token read from file is ', token)
 
         if token is None:
             return
@@ -54,13 +59,15 @@ class ExpoTokenHelper:
         }
 
         response = requests.post('https://exp.host/--/api/v2/push/send',
-                                 json=json.dumps(data),
+                                 data=json.dumps(data),
                                  headers={
-                                     'host': 'exp.host',
+                                     'Host': 'exp.host',
                                      'Accept': 'application/json',
                                      'Accept-encoding': 'gzip, deflate',
                                      'Content-Type': 'application/json',
                                  })
+
+        print(response.request.headers)
 
         print('JOSE: Response from expo request ',
               response.status_code, response.text)
