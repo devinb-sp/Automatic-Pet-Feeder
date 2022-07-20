@@ -59,7 +59,7 @@ class ScheduleHelper:
 
     def __set_background_schedule_for_food(self, food_schedule):
         '''Sets background schedule'''
-        self.__scheduler.remove_all_jobs()
+        self.__scheduler.remove_job('food-schedule')
 
         now = datetime.now()
         for i, time in enumerate(food_schedule['times']):
@@ -70,7 +70,8 @@ class ScheduleHelper:
             self.__scheduler.add_job(self.__arduino.dispense_food,
                                      'interval', [food_schedule['amounts'][i]],
                                      hours=24,
-                                     next_run_time=schedule_datetime)
+                                     next_run_time=schedule_datetime,
+                                     id='food-schedule')
 
         if not self.__scheduler.running:
             self.__scheduler.start()
