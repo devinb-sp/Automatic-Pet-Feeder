@@ -2,7 +2,7 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import { ApiHelper } from './api_helper';
 
-const apiHelper = ApiHelper();
+const apiHelper = new ApiHelper();
 
 export class PushNotificationsHelper {
   registerForPushNotificationsAsync = async () => {
