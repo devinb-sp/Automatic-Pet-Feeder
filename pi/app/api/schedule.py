@@ -59,7 +59,12 @@ class ScheduleHelper:
 
     def __set_background_schedule_for_food(self, food_schedule):
         '''Sets background schedule'''
-        self.__scheduler.remove_job('food-schedule')
+        try:
+            self.__scheduler.remove_job('food-schedule0')
+            self.__scheduler.remove_job('food-schedule1')
+            self.__scheduler.remove_job('food-schedule2')
+        except:
+            print('Could not delete a job. But that might not be too bad')
 
         now = datetime.now()
         for i, time in enumerate(food_schedule['times']):
@@ -71,7 +76,7 @@ class ScheduleHelper:
                                      'interval', [food_schedule['amounts'][i]],
                                      hours=24,
                                      next_run_time=schedule_datetime,
-                                     id='food-schedule')
+                                     id=f'food-schedule{i}')
 
         if not self.__scheduler.running:
             self.__scheduler.start()
