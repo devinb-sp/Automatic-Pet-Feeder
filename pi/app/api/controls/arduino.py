@@ -71,7 +71,7 @@ class Arduino:
         sleep(0.5)
         value = self.arduino.readline().decode(ENCODING).rstrip()
         print('JOSE: Water type is ', type(value), value)
-        if int(value) <= 23:
+        if int(value) >= 23:
             if self.last_water_notification_sent_time is None:
                 self.last_water_notification_sent_time = datetime.now()
                 print('Should send water notification here')
@@ -91,7 +91,7 @@ class Arduino:
         sleep(0.5)
         value = self.arduino.readline().decode(ENCODING).rstrip()
         print('JOSE: Food type is ', type(value), value)
-        if int(value) <= 10:
+        if int(value) >= 10:
             if self.last_food_notification_sent_time is None:
                 self.last_food_notification_sent_time = datetime.now()
                 print('Should send food notification here')
