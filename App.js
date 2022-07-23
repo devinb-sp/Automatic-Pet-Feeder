@@ -10,6 +10,7 @@ import Home from './screens/Home';
 import Camera from './screens/Camera';
 import Settings from './screens/Settings';
 import Login from './screens/Login';
+import Signup from './screens/Signup';
 import { PushNotificationsHelper } from './helpers/push_notifications_helper';
 
 const Tab = createBottomTabNavigator();
@@ -101,6 +102,7 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen options={{ headerShown: false }} name="Login" component={Login} />
+        <Stack.Screen options={{ headerShown: false }} name="Signup" component={Signup} />
         <Stack.Screen name="After Login" component={AfterLogin} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>

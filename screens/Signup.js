@@ -6,42 +6,31 @@ import { auth } from '../firebase';
 import petFeederImage from '../assets/images/petfeeder.png';
 import loginStyles from '../stylesheets/loginStyles';
 
-const Login = () => {
+const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        navigation.navigate('After Login');
-        const uid = user.uid;
-      } else {
-        // User is signed out
-        navigation.navigate('Login');
-      }
-    });
-
-    return unsubscribe;
-  }, []);
-
   const handleSignUp = () => {
-    navigation.navigate('Signup');
-  };
-
-  const handleLogin = () => {
-    signInWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
+        navigation.navigate('Login');
       })
       .catch((error) => alert(error.message));
+  };
+
+  const goBack = () => {
+    navigation.navigate('Login');
   };
 
   return (
     <KeyboardAvoidingView style={loginStyles.container} behavior="padding">
       <Image style={loginStyles.image} source={petFeederImage}></Image>
       <View style={loginStyles.inputContainer}>
+        <TextInput placeholder="First Name" style={loginStyles.input} />
+        <TextInput placeholder="Last Name" style={loginStyles.input} />
         <TextInput
           placeholder="Email"
           value={email}
@@ -58,16 +47,16 @@ const Login = () => {
       </View>
 
       <View style={loginStyles.buttonContainer}>
-        <TouchableOpacity onPress={handleLogin} style={loginStyles.button}>
-          <Text style={loginStyles.buttonText}>Sign In</Text>
+        <TouchableOpacity onPress={handleSignUp} style={loginStyles.button}>
+          <Text style={loginStyles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
-        <Text style={loginStyles.signUpQuestion}>Don't have an account?</Text>
-        <TouchableOpacity onPress={handleSignUp} style={loginStyles.textButton}>
-          <Text style={loginStyles.textButtonText}>SIGN UP NOW</Text>
+        <Text style={loginStyles.signUpQuestion}>Already have an account?</Text>
+        <TouchableOpacity onPress={goBack} style={loginStyles.textButton}>
+          <Text style={loginStyles.textButtonText}>LOG IN</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
 };
 
-export default Login;
+export default Signup;
