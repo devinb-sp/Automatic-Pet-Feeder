@@ -198,10 +198,9 @@ void readFoodForceSensor()
 
 void readForceSensor(void (*startFunc)(), void (*stopFunc)())
 {
-
-  if (waterSensor < 40) {
+  if (waterSensor < 100) {
     stopPumpAction();
-  } else if (waterSensor < 450) {
+  } else if (waterSensor < 710) {
     startPumpAction();
   } else {
     stopPumpAction();
@@ -213,8 +212,7 @@ void readForceSensor(void (*startFunc)(), void (*stopFunc)())
 }
 
 void wait() {
-
-    if (waterSensor < 300) {
+    if (waterSensor < 400) {
       flag = true;
       return;
     }
