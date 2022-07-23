@@ -39,7 +39,7 @@ const Home = ({ tabClicked }) => {
     }
   }, [tabClicked]);
 
-  const SECONDS_MS = 10000;
+  const SECONDS_MS = 30000;
 
   useEffect(() => {
     const interval = setInterval(() => {

@@ -11,6 +11,7 @@ export class ApiHelper {
   getWaterDistanceEndpoint = 'get-water-distance';
   getFoodDistanceEndpoint = 'get-food-distance';
   canReadLevelsEndpoint = 'can-read-levels';
+  setExpoTokenEndpoint = 'set-expo-token';
   isGettingLevels = false;
 
   startMotor() {
@@ -82,6 +83,14 @@ export class ApiHelper {
         times: times,
       },
     });
+  }
+
+  setExpoToken(token) {
+    data = {
+      token: token,
+    };
+
+    this.sendPostRequest(this.setExpoTokenEndpoint, data);
   }
 
   // Helper methods //

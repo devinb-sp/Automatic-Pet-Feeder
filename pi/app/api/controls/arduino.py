@@ -1,9 +1,10 @@
 '''Controls all the basic functions of the Arduino'''
 from time import sleep
-from datetime import datetime, timedelta
-from api.firebase.firebase_helper import FirebaseHelper
-import serial
+from datetime import datetime
 import threading
+import serial
+from api.helpers.expo_token_helper import ExpoTokenHelper
+
 
 PORT = '/dev/ttyUSB0'
 BAUD_RATE = 9600
@@ -26,9 +27,9 @@ class Arduino:
         'read_food_distance': 6
     }
 
-    def __init__(self, firebase_helper: FirebaseHelper):
+    def __init__(self, expo_token_helper: ExpoTokenHelper):
         self.arduino = serial.Serial(PORT, BAUD_RATE)
-        self.firebase_helper = firebase_helper
+        self.expo_token_helper = expo_token_helper
 
     def __perform_action(self, action: int, args: list = None):
         '''Base control by passing an action'''
@@ -70,12 +71,13 @@ class Arduino:
         sleep(0.5)
         value = self.arduino.readline().decode(ENCODING).rstrip()
         print('JOSE: Water type is ', type(value), value)
-        if int(value) <= 23:
+        if int(value) >= 23:
             if self.last_water_notification_sent_time is None:
                 self.last_water_notification_sent_time = datetime.now()
                 print('Should send water notification here')
-                # self.firebase_helper.send_notification_message(
-                #    'token', {'title': notification_title, 'body': notification_body})
+                self.expo_token_helper.send_notification(
+                    title='Water Level Low',
+                    body='Water level in container is low. Please refill to avoid interruptions')
             else:
                 print('Water notification was sent, not doing anything now')
         else:
@@ -88,12 +90,14 @@ class Arduino:
         self.__perform_action(self.actions['read_food_distance'])
         sleep(0.5)
         value = self.arduino.readline().decode(ENCODING).rstrip()
-        if int(value) <= 10:
+        print('JOSE: Food type is ', type(value), value)
+        if int(value) >= 10:
             if self.last_food_notification_sent_time is None:
                 self.last_food_notification_sent_time = datetime.now()
                 print('Should send food notification here')
-                # self.firebase_helper.send_notification_message(
-                #    'token', {'title': notification_title, 'body': notification_body})
+                self.expo_token_helper.send_notification(
+                    title='Food Level Low',
+                    body='Food level in container is low. Please refill to avoid interruptions')
             else:
                 print('Food notification was sent, not doing anything now')
         else:
