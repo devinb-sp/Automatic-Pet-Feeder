@@ -16,7 +16,7 @@ const Signup = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        navigation.navigate('Login');
+        navigation.navigate('After Login');
       })
       .catch((error) => alert(error.message));
   };

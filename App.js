@@ -20,7 +20,6 @@ const pushNotificationsHelper = new PushNotificationsHelper();
 
 const AfterLogin = () => {
   const [isCameraFeedStopped, setIsCameraFeedStopped] = useState(true);
-  const [tabClicked, setTabClicked] = useState(false);
 
   useEffect(() => {
     pushNotificationsHelper.registerForPushNotificationsAsync();
@@ -55,10 +54,8 @@ const AfterLogin = () => {
               setIsCameraFeedStopped(true);
               apiHelper.stopCameraFeed();
             }
-            setTabClicked(!tabClicked);
           },
         })}
-        children={() => <Home tabClicked={tabClicked} />}
       />
       <Tab.Screen
         name="Camera"
