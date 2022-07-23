@@ -22,7 +22,7 @@ export class PushNotificationsHelper {
       console.log(token);
       apiHelper.setExpoToken(token);
     } else {
-      alert('Must use physical device for Push Notifications');
+      // alert('Must use physical device for Push Notifications');
     }
 
     if (Platform.OS === 'android') {

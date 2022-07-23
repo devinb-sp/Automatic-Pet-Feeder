@@ -8,7 +8,7 @@ const cameraStyles = StyleSheet.create({
     marginTop: 20,
     marginRight: 10,
     marginLeft: 10,
-    marginBottom: 300,
+    marginBottom: 350,
   },
   welcomeText: {
     fontFamily: 'RobotoBlack',
