@@ -48,6 +48,7 @@ const AfterLogin = () => {
     >
       <Tab.Screen
         name="Home"
+        component={Home}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
             if (!isCameraFeedStopped) {
